@@ -1,13 +1,13 @@
 import React from 'react';
-import NavBar from './components/NavBar';
+import Navbar from './navigation/Navbar';
 import Transactions from './components/Transactions';
-import WalletCard from './components/WalletCard';
+import Home from './page/Home'
  
 const App = () => {
   return (
     <div>
-      <NavBar />
-      <WalletCard />
+      <Navbar />
+      <Home />
       <Transactions />
     </div>
   );

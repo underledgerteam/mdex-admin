@@ -3,11 +3,10 @@ import { ethers } from "ethers";
 
 declare var window: any; // telling the TypeScript compiler to treat window as of type any hence ignore any warnings.
 
-const WalletCard = () => {
-
-  const [defaultAccount, setDefaultAccount] = useState('');
-  const [userBalance, setUserBalance] = useState('');
-  const [errorMessage, setErrorMessage] = useState(''); // the inital state value can't be null
+export const ButtonConnect = () => {
+  const [defaultAccount, setDefaultAccount] = useState("");
+  const [userBalance, setUserBalance] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // the inital state value can't be null
   const { ethereum } = window;
 
   const connectWallet = async () => {
@@ -20,29 +19,27 @@ const WalletCard = () => {
       // });
       const signer = provider.getSigner(); // Holds your private key and can sign things
       changeAccountHandler(accounts[0]);
-      
     } else {
-      setErrorMessage('Please install MetaMask'); //can't assign to parameter of type 'SetStateAction<null or undefine>'
+      setErrorMessage("Please install MetaMask"); //can't assign to parameter of type 'SetStateAction<null or undefine>'
     }
+  };
 
-  }
-
-  const changeAccountHandler = (newAccount: string) : void =>  {
+  const changeAccountHandler = (newAccount: string): void => {
     setDefaultAccount(newAccount);
     getUserBalance(newAccount);
-  }
+  };
 
   const getUserBalance = async (address: string) => {
     const balance = await ethereum.request({
-      method: 'eth_getBalance', 
-      params: [address, 'latest']
+      method: "eth_getBalance",
+      params: [address, "latest"],
     });
 
     setUserBalance(ethers.utils.formatEther(balance));
-  }
+  };
 
   return (
-    <div className="bg-sky-500 flex flex-col w-full justify-center items-center">
+    <div>
       {!defaultAccount && (
         <button
           type="button"
@@ -53,13 +50,7 @@ const WalletCard = () => {
         </button>
       )}
 
-      <div className="flex flex-col">
-        <p>Address: {defaultAccount}</p>
-        <p>Balance: {userBalance}</p>
-        {errorMessage}
-      </div>
     </div>
   );
 };
 
-export default WalletCard;
