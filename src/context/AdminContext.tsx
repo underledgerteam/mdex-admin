@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { useEffect, useState, createContext } from "react";
 import { ethers } from "ethers";
 
 declare var window: any; // telling the TypeScript compiler to treat window as of type any hence ignore any warnings.
@@ -15,6 +15,7 @@ type AdminContextProviderType = {
 type AdminContextProviderProps = {
   children: React.ReactNode;
 };
+
 export const AdminContext = createContext<AdminContextProviderType | null>(null);
 
 export const AdminContextProvider = ({
@@ -24,18 +25,22 @@ export const AdminContextProvider = ({
   const [errorMessage, setErrorMessage] = useState<string>("");
 
   const changeHandler = (account: string): void => {
-    if(account === "0x733c6f2c476bb2bae4d9d694377ef109c0a576f6")
+    if(account == "0x733c6f2c476bb2bae4d9d694377ef109c0a576f6")
+      setAdminAccount(account);
+    else if (account == "0x586F45EF74679373EFAfcEF08f7035fB699F40dd")
       setAdminAccount(account);
     else 
       setErrorMessage("Access denied");
   }
 
   const connectWallet = async (): Promise<void> => {
+    
     if (ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum); // A connection to the Ethereum network
       const accounts = await provider.send("eth_requestAccounts", []);
       //const signer = provider.getSigner(); // Holds your private key and can sign things
-      changeHandler(accounts[0]);
+      setAdminAccount(accounts[0]);
+      // changeHandler(accounts[0]);
     } else {
       alert("Please install MetaMask"); //can't assign to parameter of type 'SetStateAction<null or undefine>'
     }
@@ -59,6 +64,13 @@ export const AdminContextProvider = ({
       throw new Error("No ethereum object.");
     }
   };
+
+  useEffect(() => {
+    const init = async () => {
+      await checkIfWalletIsConnected();
+    };
+    init();
+  }, [adminAccount]);
 
   return (
     <AdminContext.Provider value={{ adminAccount, errorMessage, connectWallet, checkIfWalletIsConnected }}>
