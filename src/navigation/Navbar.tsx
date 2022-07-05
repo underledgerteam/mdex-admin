@@ -1,16 +1,13 @@
-import React from "react";
-import { ButtonConnect } from "../components/ButtonConnect";
+import React,{useState,useContext} from "react";
+import { AdminContext } from "../context/AdminContext";
 
 const Navbar = () => {
+  const admin = useContext(AdminContext);
   return (
     <div>
-      <nav className="w-full flex justify-between items-center p-4 bg-black">
-        <div className="flex flex-row items-center flex-initial">
-          <h1 className="text-3xl text-white">Multisig Wallet</h1>
-          <div>
-            <ButtonConnect />  
-          </div>
-        </div>
+      <nav className="w-full flex justify-between items-center p-4 bg-blue-500 text-white">
+        <div className="text-3xl">Mdex-Admin</div>
+        <div className="text-xl">{admin?.adminAccount}</div>
       </nav>
     </div>
   );
