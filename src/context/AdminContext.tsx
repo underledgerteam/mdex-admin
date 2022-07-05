@@ -31,8 +31,6 @@ export const AdminContextProvider = ({
   }
 
   const connectWallet = async (): Promise<void> => {
-    alert("Connect to Metamask!!");
-    console.log("hello");
     if (ethereum) {
       const provider = new ethers.providers.Web3Provider(window.ethereum); // A connection to the Ethereum network
       const accounts = await provider.send("eth_requestAccounts", []);
