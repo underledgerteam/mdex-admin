@@ -1,15 +1,22 @@
-import React from "react";
-import Navbar from "./navigation/Navbar";
-import Transactions from "./components/Transactions";
+import { Fragment } from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+import Layout from './components/shared/Layout';
 import Home from "./adminPage/Home";
+import NotFound from './pages/NotFound';
 
 const App = () => {
   return (
-      <div>
-        <Navbar />
-        <Home />
-        <Transactions />
-      </div>
+    <Fragment>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Fragment>
   );
 };
 
