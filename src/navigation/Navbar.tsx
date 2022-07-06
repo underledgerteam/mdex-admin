@@ -13,7 +13,7 @@ const Navbar = () => {
     <div className="navbar-start">
       
       <div className="w-14">
-        <div className="text-xl flex text-2xl text-white uppercase font-bold cursor-pointer"><img src={MdexLogo} /><span className="mt-3 ml-3 italic">Admin</span></div>
+        <div className="text-xl flex text-2xl text-white uppercase font-bold cursor-pointer"><img src={MdexLogo} alt="MDex Admin" /><span className="mt-3 ml-3 italic">Admin</span></div>
       </div>
     </div>
     <div className="lg:flex navbar-end">
