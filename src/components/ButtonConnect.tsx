@@ -12,9 +12,9 @@ const ButtonConnect = (): any => {
         <button
           type="button"
           onClick={admin?.connectWallet}
-          className="btn btn-primary btn-lg"
+          className="btn btn-connect"
         >
-          Connect
+          Connect Wallet
         </button>
       )}
 

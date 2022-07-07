@@ -4,6 +4,7 @@ import { shortenAddress } from "../utils/shortenAddress.util";
 
 // Assets
 import MdexLogo from "../assets/images/logo/mdex_logo.png";
+import ButtonConnect from "../components/ButtonConnect";
 
 const Navbar = () => {
   const admin = useContext(AdminContext);
@@ -13,7 +14,7 @@ const Navbar = () => {
     <div className="navbar-start">
       
       <div className="w-14">
-        <button className="text-xl flex text-2xl text-white uppercase font-bold cursor-pointer"><img src={MdexLogo} /></button>
+        <div className="text-xl flex text-2xl text-white uppercase font-bold cursor-pointer"><img src={MdexLogo} alt="MDex Admin" /><span className="mt-3 ml-3 italic">Admin</span></div>
       </div>
     </div>
     <div className="lg:flex navbar-end">
@@ -25,7 +26,7 @@ const Navbar = () => {
       >
         {shortenAddress(admin?.adminAccount)}
       </div>
-      ) : ( <></> )}
+      ) : ( <ButtonConnect /> )}
     </div>
   </div>
 </div>
