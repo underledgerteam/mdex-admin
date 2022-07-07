@@ -41,7 +41,7 @@ const TransferBalance = () => {
     <div>
       <div className="input-group">
         <span className="bg-white">Balance</span>
-        <span className="input input-bordered bg-white justify-center w-1/3" >1 USDT</span>
+        <span className="input input-bordered bg-white justify-end w-1/3" >1,000 USDT</span>
         <button className="btn btn-connect" onClick={toggleModal}>
         🔀 Transfer
         </button>
