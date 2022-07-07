@@ -2,7 +2,7 @@ import React from 'react';
 
 const Transactions = () => {
   return (
-    <div className="mt-5">
+    <div className="mt-10">
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
@@ -18,7 +18,7 @@ const Transactions = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="text-center hover">
+            <tr className="text-center">
               <td colSpan={8}>No results found.</td>
             </tr>
           </tbody>

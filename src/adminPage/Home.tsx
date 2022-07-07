@@ -17,12 +17,13 @@ const Home = () => {
 
 
   return (
+    <div className=" flex justify-center items-center p-8">
     <Card
-      className="glass w-full md:w-3/4 overflow-visible"
+      className="glass w-full md:w-3/4 overflow-visible lg:overflow-hidden"
     >
       <Fragment>
 
-        <div className="w-full h-screen text-center">
+        <div className="w-full min-h-[600px] text-center">
         {admin?.adminAccount ? (
           <>
           <div className="grid grid-cols-2 gap-4">
@@ -45,6 +46,7 @@ const Home = () => {
         
       </Fragment>
     </Card>
+    </div>
   );
 };
 
