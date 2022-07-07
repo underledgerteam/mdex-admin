@@ -4,6 +4,7 @@ import { shortenAddress } from "../utils/shortenAddress.util";
 
 // Assets
 import MdexLogo from "../assets/images/logo/mdex_logo.png";
+import ButtonConnect from "../components/ButtonConnect";
 
 const Navbar = () => {
   const admin = useContext(AdminContext);
@@ -25,7 +26,7 @@ const Navbar = () => {
       >
         {shortenAddress(admin?.adminAccount)}
       </div>
-      ) : ( <></> )}
+      ) : ( <ButtonConnect /> )}
     </div>
   </div>
 </div>

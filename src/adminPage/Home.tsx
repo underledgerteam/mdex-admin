@@ -14,7 +14,7 @@ const Home = () => {
     titleClassName="text-4xl mb-5"
     >
       <Fragment>
-        <div className="w-full h-screen flex justify-center items-center">
+        <div className="w-full h-screen text-center">
         {admin?.adminAccount ? (
           <Transactions />
         ) : ( 
