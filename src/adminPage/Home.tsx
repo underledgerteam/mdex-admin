@@ -8,17 +8,20 @@ import Card from "../components/shared/Card";
 const Home = () => {
   const admin = useContext(AdminContext);
   return (
-    <Card 
-    className="glass w-full md:w-3/4 overflow-visible"
-    titleClassName="text-4xl mb-5"
+    <Card
+      className="glass w-full md:w-3/4 overflow-visible"
+      titleClassName="text-4xl mb-5"
     >
       <Fragment>
         <div className="w-full h-screen text-center">
-        {admin?.adminAccount ? (
-          <Transactions />
-        ) : ( 
-          <ButtonConnect />
-        )}
+          {admin?.adminAccount ? (
+            <div>
+              <TransferBalance />
+              <Transactions />
+            </div>
+          ) : (
+            <ButtonConnect />
+          )}
         </div>
       </Fragment>
     </Card>
