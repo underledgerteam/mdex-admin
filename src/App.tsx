@@ -1,3 +1,4 @@
+
 import { Fragment } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -7,6 +8,7 @@ import NotFound from './pages/NotFound';
 
 const App = () => {
   return (
+
     <Fragment>
       <BrowserRouter>
         <Routes>
@@ -17,6 +19,7 @@ const App = () => {
         </Routes>
       </BrowserRouter>
     </Fragment>
+
   );
 };
 

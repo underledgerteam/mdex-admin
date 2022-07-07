@@ -1,8 +1,5 @@
 import React, { useEffect, useState, createContext } from "react";
 import { ethers } from "ethers";
-import { SUPPORT_CHAIN } from "../utils/constants";
-
-import { SWAP_CONTRACTS } from "../utils/constants"
 
 declare var window: any; // telling the TypeScript compiler to treat window as of type any hence ignore any warnings.
 
@@ -11,60 +8,60 @@ const { ethereum } = window;
 type AdminContextProviderType = {
   adminAccount: string;
   errorMessage: string;
+  adminBalance: string;
+  handleFormData: (item: { addressTo: string; amount: string }) => void;
   connectWallet: () => Promise<void>;
   checkIfWalletIsConnected: () => Promise<void>;
-  walletSwitchChain: (chainId: number) => void;
+  sendTransaction: () => Promise<void>;
 };
 
 type AdminContextProviderProps = {
   children: React.ReactNode;
 };
 
-export const AdminContext = createContext<AdminContextProviderType | null>(null);
+export const AdminContext = createContext<AdminContextProviderType | null>(
+  null
+);
 
 export const AdminContextProvider = ({
   children,
 }: AdminContextProviderProps) => {
   const [adminAccount, setAdminAccount] = useState<string>("");
-  const [isSupported, setIsSupported] = useState<boolean>(false);
+  const [adminBalance, setAdminBalance] = useState<string>(""); // for test case before get treasury
   const [errorMessage, setErrorMessage] = useState<string>("");
+  const [formData, setFormData] = useState<{
+    addressTo: string;
+    amount: string;
+  }>({
+    addressTo: "",
+    amount: "",
+  });
 
   const changeHandler = (account: string): void => {
-    if(account == "0x733c6f2c476bb2bae4d9d694377ef109c0a576f6")
+    if (account === "0x733c6f2c476bb2bae4d9d694377ef109c0a576f6")
+      // Jab address
       setAdminAccount(account);
-    else if (account == "0x586F45EF74679373EFAfcEF08f7035fB699F40dd")
+    else if (account === "0x586F45EF74679373EFAfcEF08f7035fB699F40dd")
+      // P'Jo address
       setAdminAccount(account);
-    else 
-      setErrorMessage("Access denied");
-  }
-
-  const connectWallet = async (): Promise<void> => {
-    
-    if (ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum); // A connection to the Ethereum network
-      const accounts = await provider.send("eth_requestAccounts", []);
-      //const signer = provider.getSigner(); // Holds your private key and can sign things
-      setAdminAccount(accounts[0]);
-      // changeHandler(accounts[0]);
-    } else {
-      alert("Please install MetaMask"); //can't assign to parameter of type 'SetStateAction<null or undefine>'
-    }
+    else setErrorMessage("Access denied");
   };
 
-  const checkIfWalletIsConnected = async (): Promise<void> => {
+  const handleFormData = (item: { addressTo: string; amount: string }) => {
+    setFormData(item);
+  };
+
+  const connectWallet = async (): Promise<void> => {
     try {
       if (!ethereum) return alert("Please install metamask");
+
       const provider = new ethers.providers.Web3Provider(ethereum);
-      const { chainId } = await provider.getNetwork();
-
-      const accounts = await ethereum.request({ method: "eth_accounts" });
-
-      if (accounts.length) {
-        setAdminAccount(accounts[0]);
-        setIsSupported(SUPPORT_CHAIN.includes(chainId));
-      } else {
-        console.log("No accounts found");
-      }
+      const accounts = await provider.send("eth_requestAccounts", []);
+      const balance = await provider.getBalance(accounts[0]);
+      
+      setAdminAccount(accounts[0]);
+      // changeHandler(accounts[0]);
+      setAdminBalance(ethers.utils.formatEther(balance));
 
     } catch (error) {
       console.log(error);
@@ -72,54 +69,75 @@ export const AdminContextProvider = ({
       throw new Error("No ethereum object.");
     }
   };
-  
-  const walletAddChain = async (chainId: number): Promise<void> => {
+
+  const checkIfWalletIsConnected = async (): Promise<void> => {
     try {
+      if (!ethereum) return alert("Please install metamask");
+
+      // const accounts = await ethereum.request({ method: "eth_accounts" });
       const provider = new ethers.providers.Web3Provider(ethereum);
-      await provider.send("wallet_addEthereumChain", [{
-        chainId: ethers.utils.hexValue(Number(chainId)),
-        chainName: SWAP_CONTRACTS[chainId].NETWORK_NAME,
-        nativeCurrency: {
-          name: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.NAME,
-          symbol: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.SYMBOL,
-          decimals: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.DECIMALS,
-        },
-        rpcUrls: SWAP_CONTRACTS[chainId].RPC_URLS,
-        blockExplorerUrls: SWAP_CONTRACTS[chainId].BLOCK_EXPLORER_URLS,
-      }]);
+      const accounts = await provider.send("eth_requestAccounts", []);
+      const balance = await provider.getBalance(accounts[0]);
+
+      if (accounts.length) {
+        // changeHandler(accounts[0]);
+        setAdminAccount(accounts[0]);
+        setAdminBalance(ethers.utils.formatEther(balance));
+
+      } else {
+        console.log("No accounts found");
+      }
     } catch (error) {
-      throw new Error(`Can't Add ${SWAP_CONTRACTS[chainId].NETWORK_NAME} to Wallet`);
+      console.log(error);
+
+      throw new Error("No ethereum object.");
     }
   };
-  const currentNetwork = async() => {
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const { chainId } = await provider.getNetwork();
-    return chainId;
-  };
-  const walletSwitchChain = async (chainId: number): Promise<void> => {
+
+  const sendTransaction = async (): Promise<void> => {
     try {
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const currentChain = await currentNetwork();
-      if (chainId !== currentChain) {
-        await provider.send("wallet_switchEthereumChain", [{ chainId: ethers.utils.hexValue(chainId) }]);
-      }
-    } catch (error: any) {
-      if (error.code === 4902) {
-        await walletAddChain(chainId);
-      }
-      throw new Error("Can't Switch Chain");
+      if (!ethereum) return alert("Please install metamask");
+
+      const { addressTo, amount } = formData;
+      const parsedAmount = ethers.utils.parseEther(amount);
+
+      await ethereum.request({
+        method: "eth_sendTransaction",
+        params: [
+          {
+            from: adminAccount,
+            to: addressTo,
+            gas: "0x5208", // 21000 GWEL
+            value: parsedAmount._hex, // eth => GWEL
+          },
+        ],
+      });
+
+      window.reload();
+    } catch (error) {
+      console.log(error);
+
+      throw new Error("No ethereum object.");
     }
   };
 
   useEffect(() => {
-    const init = async () => {
-      await checkIfWalletIsConnected();
-    };
-    init();
-  }, [adminAccount]);
+    checkIfWalletIsConnected();
+    // console.log(formData);
+  });
 
   return (
-    <AdminContext.Provider value={{ adminAccount, errorMessage, connectWallet, checkIfWalletIsConnected, walletSwitchChain }}>
+    <AdminContext.Provider
+      value={{
+        adminAccount,
+        errorMessage,
+        adminBalance,
+        handleFormData,
+        connectWallet,
+        checkIfWalletIsConnected,
+        sendTransaction,
+      }}
+    >
       {children}
     </AdminContext.Provider>
   );
