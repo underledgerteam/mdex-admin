@@ -38,9 +38,11 @@ export const AdminContextProvider = ({
   });
 
   const changeHandler = (account: string): void => {
-    if (account === "0x733c6f2c476bb2bae4d9d694377ef109c0a576f6")
+    if (account === "0x733c6f2c476bb2bae4d9d694377ef109c0a576f6"){
       // Jab address
       setAdminAccount(account);
+      getAdminBalance(account);
+    }
     else if (account === "0x586F45EF74679373EFAfcEF08f7035fB699F40dd")
       // P'Jo address
       setAdminAccount(account);
@@ -51,17 +53,29 @@ export const AdminContextProvider = ({
     setFormData(item);
   };
 
+  const getAdminBalance = async (account: string) => {
+    try {
+    const balance = await ethereum.request({method: 'eth_getBalance', params: [account, 'latest']})
+    
+      setAdminBalance(ethers.utils.formatEther(balance));
+    } catch(error) {
+      console.log(error)
+      
+      throw new Error("No ethereum object.");
+    }
+  }
+
   const connectWallet = async (): Promise<void> => {
     try {
       if (!ethereum) return alert("Please install metamask");
 
       const provider = new ethers.providers.Web3Provider(ethereum);
       const accounts = await provider.send("eth_requestAccounts", []);
-      const balance = await provider.getBalance(accounts[0]);
+      // const balance = await provider.getBalance(accounts[0]);
       
-      setAdminAccount(accounts[0]);
-      // changeHandler(accounts[0]);
-      setAdminBalance(ethers.utils.formatEther(balance));
+      // setAdminAccount(accounts[0]);
+      changeHandler(accounts[0]);
+      // setAdminBalance(ethers.utils.formatEther(balance));
 
     } catch (error) {
       console.log(error);
@@ -74,15 +88,15 @@ export const AdminContextProvider = ({
     try {
       if (!ethereum) return alert("Please install metamask");
 
-      // const accounts = await ethereum.request({ method: "eth_accounts" });
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const accounts = await provider.send("eth_requestAccounts", []);
-      const balance = await provider.getBalance(accounts[0]);
+       const accounts = await ethereum.request({ method: "eth_accounts" });// use this line of code, it just request account, not try to connect MetaMask
+      // const provider = new ethers.providers.Web3Provider(ethereum);
+      // const accounts = await provider.send("eth_requestAccounts", []);
+      // const balance = await provider.getBalance(accounts[0]);
 
       if (accounts.length) {
-        // changeHandler(accounts[0]);
-        setAdminAccount(accounts[0]);
-        setAdminBalance(ethers.utils.formatEther(balance));
+        changeHandler(accounts[0]);
+        // setAdminAccount(accounts[0]);
+        // setAdminBalance(ethers.utils.formatEther(balance));
 
       } else {
         console.log("No accounts found");
@@ -96,11 +110,13 @@ export const AdminContextProvider = ({
 
   const sendTransaction = async (): Promise<void> => {
     try {
+      
       if (!ethereum) return alert("Please install metamask");
 
       const { addressTo, amount } = formData;
+      console.log("before parseAmount")
       const parsedAmount = ethers.utils.parseEther(amount);
-
+      console.log("I'm here!")
       await ethereum.request({
         method: "eth_sendTransaction",
         params: [
@@ -124,7 +140,7 @@ export const AdminContextProvider = ({
   useEffect(() => {
     checkIfWalletIsConnected();
     // console.log(formData);
-  });
+  },[]);
 
   return (
     <AdminContext.Provider
