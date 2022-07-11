@@ -1,21 +1,40 @@
 import React, { useEffect, useState, useContext } from "react";
 import { InputSelectInterface } from "../../types/InputSelect";
 
+import { AdminContext } from "../../context/AdminContext";
+
 
 const InputSelectNetwork = ({className, listOption, selectionUpdate, defaultValue = "", selectLabel}:InputSelectInterface): JSX.Element => {
     
-    const [value, setValue] = useState<string | JSX.Element>(defaultValue);
+    const admin = useContext(AdminContext);
+    const [value, setValue] = useState<number | string | JSX.Element>(defaultValue);
+
+    const handelShowSelectNetwork = () => {
+      const dropdown = document.querySelectorAll(".dropdown-content.show");
+      dropdown && dropdown.forEach((list)=>{
+        if(list.id !== `dropdown-content-${selectionUpdate.toLowerCase()}-chain`){
+          list.classList.remove("show");
+        }
+      });
+      document.getElementById(`dropdown-content-${selectionUpdate.toLowerCase()}-chain`)?.classList.toggle("show");
+    };
+
+    useEffect(()=>{
+      setValue(listOption?.find((x) => x.value == admin?.currentNetwork)?.label || "");
+
+    },[admin]);
 
     return (
       <>
         <div className={`flex items-center justify-end ${className}`}>
           <div className="dropdown w-1/2">
-            <label id="dropdown-title" className="select select-bordered items-center w-full">{selectLabel}</label>
+            <label id="dropdown-title" className={`select select-bordered items-center m-1 w-full ${!admin?.checkIfWalletIsConnected || admin?.adminAccount === ""? "pointer-events-none bg-slate-300/60": ""}`} onClick={()=> handelShowSelectNetwork()}>{value || selectLabel}</label>
             <ul id={`dropdown-content-${selectionUpdate.toLowerCase()}-chain`} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-full">
               { listOption?.map((list, key)=>{
                 return(<li key={key}>
                   <div 
-                    className={`""`}
+                    className={`${(admin?.currentNetwork == list.value)? "cursor-no-drop text-custom-black/70 bg-slate-400/30 pointer-events-none": ""}`}
+                    
                     >
                     {list.label}
                   </div>

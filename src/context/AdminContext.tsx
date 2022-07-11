@@ -9,6 +9,7 @@ type AdminContextProviderType = {
   adminAccount: string;
   errorMessage: string;
   adminBalance: string;
+  currentNetwork: number | string;
   handleFormData: (item: { addressTo: string; amount: string }) => void;
   connectWallet: () => Promise<void>;
   checkIfWalletIsConnected: () => Promise<void>;
@@ -28,6 +29,7 @@ export const AdminContextProvider = ({
 }: AdminContextProviderProps) => {
   const [adminAccount, setAdminAccount] = useState<string>("");
   const [adminBalance, setAdminBalance] = useState<string>(""); // for test case before get treasury
+  const [currentNetwork, setCurrentNetwork] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [formData, setFormData] = useState<{
     addressTo: string;
@@ -43,10 +45,13 @@ export const AdminContextProvider = ({
       setAdminAccount(account);
       getAdminBalance(account);
     }
-    else if (account === "0x586F45EF74679373EFAfcEF08f7035fB699F40dd")
+    else if (account === "0x586F45EF74679373EFAfcEF08f7035fB699F40dd"){
       // P'Jo address
       setAdminAccount(account);
-    else setErrorMessage("Access denied");
+      getAdminBalance(account);
+    }
+    else { setErrorMessage("Access denied");
+    }
   };
 
   const handleFormData = (item: { addressTo: string; amount: string }) => {
@@ -83,19 +88,27 @@ export const AdminContextProvider = ({
       throw new Error("No ethereum object.");
     }
   };
+  
+  const myNetwork = async() => {
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    const { chainId } = await provider.getNetwork();
+    return chainId;
+  };
 
   const checkIfWalletIsConnected = async (): Promise<void> => {
     try {
       if (!ethereum) return alert("Please install metamask");
 
        const accounts = await ethereum.request({ method: "eth_accounts" });// use this line of code, it just request account, not try to connect MetaMask
+       const currentChain = await myNetwork();
       // const provider = new ethers.providers.Web3Provider(ethereum);
       // const accounts = await provider.send("eth_requestAccounts", []);
       // const balance = await provider.getBalance(accounts[0]);
 
       if (accounts.length) {
         changeHandler(accounts[0]);
-        // setAdminAccount(accounts[0]);
+        setAdminAccount(accounts[0]);
+        setCurrentNetwork(currentChain);
         // setAdminBalance(ethers.utils.formatEther(balance));
 
       } else {
@@ -152,6 +165,7 @@ export const AdminContextProvider = ({
         connectWallet,
         checkIfWalletIsConnected,
         sendTransaction,
+        currentNetwork,
       }}
     >
       {children}
