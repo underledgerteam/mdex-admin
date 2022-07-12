@@ -87,4 +87,14 @@ export const SUPPORT_CHAIN: number[] = [
   AVALANCHE_FUJI,
 ];
 
+export const ADMIN_WALLET: string[] = [
+  '0x733c6f2c476bb2bae4d9d694377ef109c0a576f6', // Jab
+  '0x586f45ef74679373efafcef08f7035fb699f40dd', // Jo
+  '0xE507a517934d0F88663D242A580B5aC548a63786', // Golf
+  '0x23abB459fC3Ae05B52f482aBB2D2D9D7C9e33D28', // Mob
+  '0xe9D2e454968379426BB6b0a92ffaf20A60ff579d', // Prame
+  '0xa9aAB3581a3986E38E84643793FCe205677bd19d', // Aon
+  '0x2BA9a6C68D39EFEc15C2c048124B4f6dAac5d6fd', // Tang
+];
+
 export const DEFAULT_CHAIN: number = RINKEBY;
