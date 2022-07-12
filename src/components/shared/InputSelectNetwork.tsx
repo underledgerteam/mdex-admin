@@ -19,10 +19,30 @@ const InputSelectNetwork = ({className, listOption, selectionUpdate, defaultValu
       document.getElementById(`dropdown-content-${selectionUpdate.toLowerCase()}-chain`)?.classList.toggle("show");
     };
 
+    const handelSelectNetwork = (value: string | number, label: JSX.Element | string) => {
+      admin?.updateSwitchChain(value);
+      setValue(label);
+      document.getElementById(`dropdown-content-${selectionUpdate.toLowerCase()}-chain`)?.classList.toggle("show");
+    };
+
     useEffect(()=>{
       setValue(listOption?.find((x) => x.value == admin?.currentNetwork)?.label || "");
 
     },[admin]);
+
+    useEffect(() => {
+      const dropdownClose = (e: any) => {
+        const dropdown = document.querySelectorAll(".dropdown-content.show");
+        if (dropdown.length > 0 && !e.path[0].id) {
+          dropdown.forEach((list) => {
+            list.classList.remove("show");
+            // document.getElementById(`root`)?.classList.remove("fix-h-screen");
+          });
+        }
+      };
+      document.body.addEventListener("click", dropdownClose);
+      return () => document.body.removeEventListener("click", dropdownClose);
+    }, []);
 
     return (
       <>
@@ -34,7 +54,7 @@ const InputSelectNetwork = ({className, listOption, selectionUpdate, defaultValu
                 return(<li key={key}>
                   <div 
                     className={`${(admin?.currentNetwork == list.value)? "cursor-no-drop text-custom-black/70 bg-slate-400/30 pointer-events-none": ""}`}
-                    
+                    onClick={() => handelSelectNetwork(list.value, list.label)}
                     >
                     {list.label}
                   </div>

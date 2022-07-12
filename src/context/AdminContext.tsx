@@ -1,5 +1,7 @@
 import React, { useEffect, useState, createContext } from "react";
 import { ethers } from "ethers";
+import { SWAP_CONTRACTS, SUPPORT_CHAIN, ADMIN_WALLET } from "../utils/constants";
+import { DangerNotification } from "../components/shared/Notification";
 
 declare var window: any; // telling the TypeScript compiler to treat window as of type any hence ignore any warnings.
 
@@ -10,10 +12,13 @@ type AdminContextProviderType = {
   errorMessage: string;
   adminBalance: string;
   currentNetwork: number | string;
+  isSupported: boolean;
+  isAdmin: boolean;
   handleFormData: (item: { addressTo: string; amount: string }) => void;
   connectWallet: () => Promise<void>;
   checkIfWalletIsConnected: () => Promise<void>;
   sendTransaction: () => Promise<void>;
+  updateSwitchChain: (value: string | number)=>void;
 };
 
 type AdminContextProviderProps = {
@@ -29,7 +34,9 @@ export const AdminContextProvider = ({
 }: AdminContextProviderProps) => {
   const [adminAccount, setAdminAccount] = useState<string>("");
   const [adminBalance, setAdminBalance] = useState<string>(""); // for test case before get treasury
-  const [currentNetwork, setCurrentNetwork] = useState<number>(0);
+  const [isSupported, setIsSupported] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [currentNetwork, setCurrentNetwork] = useState<number | string>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const [formData, setFormData] = useState<{
     addressTo: string;
@@ -39,14 +46,11 @@ export const AdminContextProvider = ({
     amount: "",
   });
 
-  const changeHandler = (account: string): void => {
-    if (account === "0x733c6f2c476bb2bae4d9d694377ef109c0a576f6"){
-      // Jab address
-      setAdminAccount(account);
-      getAdminBalance(account);
-    }
-    else if (account === "0x586F45EF74679373EFAfcEF08f7035fB699F40dd"){
-      // P'Jo address
+  const changeHandler = (account: string | any): void => {
+
+    // setIsAdmin(ADMIN_WALLET.includes(account));
+
+    if (isAdmin){
       setAdminAccount(account);
       getAdminBalance(account);
     }
@@ -74,13 +78,18 @@ export const AdminContextProvider = ({
     try {
       if (!ethereum) return alert("Please install metamask");
 
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const accounts = await provider.send("eth_requestAccounts", []);
-      // const balance = await provider.getBalance(accounts[0]);
+        const provider = new ethers.providers.Web3Provider(ethereum);
+
+        const accounts = await provider.send("eth_requestAccounts", []);// use this line of code, it just request account, not try to connect MetaMask
+        const currentChain = await myNetwork();
+        const { chainId } = await provider.getNetwork();
+        const balance = await provider.getBalance(accounts[0]);
       
-      // setAdminAccount(accounts[0]);
-      changeHandler(accounts[0]);
-      // setAdminBalance(ethers.utils.formatEther(balance));
+        setAdminAccount(accounts[0]);
+        setAdminBalance(ethers.utils.formatEther(balance));
+        setCurrentNetwork(currentChain);
+        setIsSupported(SUPPORT_CHAIN.includes(chainId));
+        setIsAdmin(ADMIN_WALLET.includes(accounts[0]));
 
     } catch (error) {
       console.log(error);
@@ -89,27 +98,76 @@ export const AdminContextProvider = ({
     }
   };
   
+
+  // Chain Network
   const myNetwork = async() => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const { chainId } = await provider.getNetwork();
     return chainId;
+  };
+  const updateSwitchChain = async(chain: string | number) => {
+    const beforeSwitchSwapObj = currentNetwork;
+    try {
+      await walletSwitchChain(Number(chain));
+      setCurrentNetwork(chain);
+    } catch (error: any) {
+      setCurrentNetwork(beforeSwitchSwapObj);
+      <DangerNotification
+        message={error.toString()}
+      />
+    }
+  };
+  const walletSwitchChain = async (chainId: number): Promise<void> => {
+    try {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const currentChain = await myNetwork();
+      if (chainId !== currentChain) {
+        await provider.send("wallet_switchEthereumChain", [{ chainId: ethers.utils.hexValue(chainId) }]);
+      }
+    } catch (error: any) {
+      if (error.code === 4902) {
+        await walletAddChain(chainId);
+      }
+      throw new Error("Can't Switch Chain");
+    }
+  };
+  const walletAddChain = async (chainId: number): Promise<void> => {
+    try {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      await provider.send("wallet_addEthereumChain", [{
+        chainId: ethers.utils.hexValue(Number(chainId)),
+        chainName: SWAP_CONTRACTS[chainId].NETWORK_NAME,
+        nativeCurrency: {
+          name: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.NAME,
+          symbol: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.SYMBOL,
+          decimals: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.DECIMALS,
+        },
+        rpcUrls: SWAP_CONTRACTS[chainId].RPC_URLS,
+        blockExplorerUrls: SWAP_CONTRACTS[chainId].BLOCK_EXPLORER_URLS,
+      }]);
+    } catch (error) {
+      throw new Error(`Can't Add ${SWAP_CONTRACTS[chainId].NETWORK_NAME} to Wallet`);
+    }
   };
 
   const checkIfWalletIsConnected = async (): Promise<void> => {
     try {
       if (!ethereum) return alert("Please install metamask");
 
-       const accounts = await ethereum.request({ method: "eth_accounts" });// use this line of code, it just request account, not try to connect MetaMask
-       const currentChain = await myNetwork();
-      // const provider = new ethers.providers.Web3Provider(ethereum);
-      // const accounts = await provider.send("eth_requestAccounts", []);
-      // const balance = await provider.getBalance(accounts[0]);
+      const accounts = await ethereum.request({ method: "eth_accounts" });// use this line of code, it just request account, not try to connect MetaMask
+      const currentChain = await myNetwork();
+       
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const { chainId } = await provider.getNetwork();
+      const balance = await provider.getBalance(accounts[0]);
 
       if (accounts.length) {
-        changeHandler(accounts[0]);
+        // changeHandler(accounts[0]);
         setAdminAccount(accounts[0]);
+        setAdminBalance(ethers.utils.formatEther(balance));
         setCurrentNetwork(currentChain);
-        // setAdminBalance(ethers.utils.formatEther(balance));
+        setIsSupported(SUPPORT_CHAIN.includes(chainId));
+        setIsAdmin(ADMIN_WALLET.includes(accounts[0]));
 
       } else {
         console.log("No accounts found");
@@ -149,11 +207,29 @@ export const AdminContextProvider = ({
       throw new Error("No ethereum object.");
     }
   };
+  const handleAccountChange = (accounts: Array<string>): void => {
+    if (accounts.length > 0) {
+      setAdminAccount(accounts[0]);
+    } else {
+      window.location.reload();
+    }
+  };
+  const handleChainChange = (chainId: string): void => {
+    window.location.reload();
+  };
 
   useEffect(() => {
-    checkIfWalletIsConnected();
-    // console.log(formData);
-  },[]);
+    const init = async () => {
+      await checkIfWalletIsConnected();
+      ethereum?.on("accountsChanged", handleAccountChange);
+      ethereum?.on("chainChanged", handleChainChange);
+    };
+    init();
+    return () => {
+      ethereum?.removeListener("accountsChanged", handleAccountChange);
+      ethereum?.removeListener("chainChanged", handleChainChange);
+    };
+  },[adminAccount]);
 
   return (
     <AdminContext.Provider
@@ -166,6 +242,9 @@ export const AdminContextProvider = ({
         checkIfWalletIsConnected,
         sendTransaction,
         currentNetwork,
+        updateSwitchChain,
+        isSupported,
+        isAdmin
       }}
     >
       {children}

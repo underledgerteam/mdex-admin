@@ -12,7 +12,7 @@ const Home = () => {
   
   const admin = useContext(AdminContext);
   const listOptionNetwork = Object.keys(SWAP_CONTRACTS).map((key) => {
-    return { value: key, label: (<Fragment><img className="mask mask-squircle mr-1" src={SWAP_CONTRACTS[Number(key)].SYMBOL} width={30} /> {SWAP_CONTRACTS[Number(key)].NETWORK_SHORT_NAME}</Fragment>) };
+    return { value: key, label: (<Fragment><img className="mask mask-squircle mr-1" alt="" src={SWAP_CONTRACTS[Number(key)].SYMBOL} width={30} /> {SWAP_CONTRACTS[Number(key)].NETWORK_SHORT_NAME}</Fragment>) };
   });
 
 
@@ -24,7 +24,7 @@ const Home = () => {
       <Fragment>
 
         <div className="w-full min-h-[600px] text-center">
-        {admin?.adminAccount ? (
+        {admin?.adminAccount && admin?.isAdmin ? (
           <>
           <div className="grid grid-cols-2 gap-4">
             <div><TransferBalance /></div>
