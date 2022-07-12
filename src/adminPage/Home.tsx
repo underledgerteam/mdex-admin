@@ -1,6 +1,6 @@
 import React, { useContext, Fragment } from "react";
 import ButtonConnect from "../components/ButtonConnect";
-import TransferBalance from "../components/TransferBalance";
+import TransferModal from "../components/TransferModal";
 import { AdminContext } from "../context/AdminContext";
 import Transactions from "../components/Transactions";
 import Card from "../components/shared/Card";
@@ -27,7 +27,7 @@ const Home = () => {
         {admin?.adminAccount && admin?.isAdmin ? (
           <>
           <div className="grid grid-cols-2 gap-4">
-            <div><TransferBalance /></div>
+            <div><TransferModal/></div>
             <div>
               <InputSelectNetwork 
                 listOption={listOptionNetwork}
