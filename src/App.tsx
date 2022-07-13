@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from './components/shared/Layout';
-import Home from "./adminPage/Home";
+import Home from "./pages/Home";
 import NotFound from './pages/NotFound';
 
 const App = () => {
