@@ -23,18 +23,26 @@ const TransferModal = () => {
     };
     admin?.handleFormData(itemData);
     admin?.sendTransaction();
+
+    closeModalHandler();
   };
 
-  const closeModalHandler = () => {
+  const clearInput = (): void => {
+    setAddressTo('');
+    setAmount(0);
+  }
+
+  const closeModalHandler = (): void => {
     let element = document.getElementById("transfer-modal") as HTMLInputElement;
     element.checked = false;
-    console.log("close modal: " + element.checked);
+    clearInput();
+    console.log("modal checked: " + element.checked);
   };
 
-  const openModalHandler = () => {
+  const openModalHandler = (): void => {
     let element = document.getElementById("transfer-modal") as HTMLInputElement;
     element.checked = true;
-    console.log("open modal: " + element.checked);
+    console.log("modal checked: " + element.checked);
   };
 
   useEffect(() => {
@@ -55,14 +63,16 @@ const TransferModal = () => {
             className="flex flex-col justify-start items-center"
           >
             <div>My balance = {admin?.adminBalance}</div>
+            <label className="font-bold text-2xl text-center">Enter address</label>
             <input
               placeholder="Address To:"
               name="addressTo"
               type="text"
               onChange={inputAddress}
               value={addressTo}
-              className="text-xl"
+              className="input input-bordered w-full my-4"
             />
+            <label className="font-bold text-2xl text-center">Enter value</label>
             <input
               placeholder="Amount (ETH):"
               name="amount"
@@ -70,11 +80,12 @@ const TransferModal = () => {
               step={0.00001}
               onChange={inputAmount}
               value={amount}
-              className="text-xl"
+              className="input input-bordered w-full my-4"
             />
 
-            <div className="flex flex-row mt-24 justify-between items-center">
+            <div className="flex flex-row mt-10 justify-between items-center">
               <button
+                type="button"
                 className="btn btn-primary mx-8"
                 onClick={closeModalHandler}
               >

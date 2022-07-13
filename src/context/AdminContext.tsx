@@ -48,8 +48,6 @@ export const AdminContextProvider = ({
 
   const changeHandler = (account: string | any): void => {
 
-    // setIsAdmin(ADMIN_WALLET.includes(account));
-
     if (isAdmin){
       setAdminAccount(account);
       getAdminBalance(account);
@@ -86,6 +84,7 @@ export const AdminContextProvider = ({
         const balance = await provider.getBalance(accounts[0]);
       
         setAdminAccount(accounts[0]);
+        console.log(accounts[0]);
         setAdminBalance(ethers.utils.formatEther(balance));
         setCurrentNetwork(currentChain);
         setIsSupported(SUPPORT_CHAIN.includes(chainId));
@@ -162,7 +161,6 @@ export const AdminContextProvider = ({
       const balance = await provider.getBalance(accounts[0]);
 
       if (accounts.length) {
-        // changeHandler(accounts[0]);
         setAdminAccount(accounts[0]);
         setAdminBalance(ethers.utils.formatEther(balance));
         setCurrentNetwork(currentChain);
