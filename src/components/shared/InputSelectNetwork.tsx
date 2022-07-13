@@ -47,7 +47,7 @@ const InputSelectNetwork = ({className, listOption, selectionUpdate, defaultValu
     return (
       <>
         <div className={`flex items-center justify-end ${className}`}>
-          <div className="dropdown w-1/2">
+          <div className="dropdown w-full lg:w-1/2">
             <label id="dropdown-title" className={`select select-bordered items-center m-1 w-full ${!admin?.checkIfWalletIsConnected || admin?.adminAccount === ""? "pointer-events-none bg-slate-300/60": ""}`} onClick={()=> handelShowSelectNetwork()}>{value || selectLabel}</label>
             <ul id={`dropdown-content-${selectionUpdate.toLowerCase()}-chain`} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-full">
               { listOption?.map((list, key)=>{

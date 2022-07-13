@@ -47,15 +47,25 @@ const TransferModal = () => {
 
   return (
     <>
-      <div className="input-group">
-        <span className="bg-white">Balance</span>
-        <span className="input input-bordered bg-white justify-end md:w-1/3">
-          1,000 USDT
-        </span>
-        <button className="btn btn-connect h-fit" onClick={openModalHandler}>
-          🔀 Transfer
-        </button>
+      <div>
+        <div className="input-group hidden md:flex">
+          <span className="bg-white">Balance :</span>
+          <span className="input input-bordered bg-white justify-end w-1/3">
+            1,000 USDT
+          </span>
+          <button className="btn btn-connect" onClick={openModalHandler}>
+            🔀 Transfer
+          </button>
+        </div>
+        <div className="md:hidden bg-white p-5 rounded-lg">
+          <div className="bg-white text-xl">Balance :</div>
+          <div className="w-full input bg-white text-2xl mt-3">1,000 USDT</div>
+          <button className="btn btn-connect mt-3" onClick={openModalHandler}>
+            🔀 Transfer
+          </button>
+        </div>
       </div>
+
       <input type="checkbox" id="transfer-modal" className="modal-toggle" />
       <div className="modal" id="transfer-modal">
         <div className="modal-box">

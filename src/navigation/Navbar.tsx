@@ -1,10 +1,52 @@
+import { FC, useContext } from "react";
+import { AdminContext } from "../context/AdminContext";
+import { shortenAddress } from "../utils/shortenAddress.util";
+import { DEFAULT_CHAIN } from "../utils/constants";
+
 // Assets
 import MdexLogo from "../assets/images/logo/mdex_logo.png";
 import ButtonConnect from "../components/ButtonConnect";
 
 
+const CheckConnectWallet: FC = () => {
+  const admin = useContext(AdminContext);
+  if (admin?.isConnected && admin?.isSupported && admin?.isAdmin) {
+    return (
+      <div
+        id="walletAddress"
+        className="inline-block text-xl px-4 py-2 leading-none border rounded-lg text-white mx-2 lg:mt-0 cursor-pointer"
+        onClick={() => { }}
+      >
+        {shortenAddress(admin?.adminAccount)}
+      </div>
+    );
+  } else if (admin?.isConnected && !admin?.isSupported && admin?.isAdmin) {
+    return (
+      <div
+        id="networkError"
+        className="inline-block text-xl px-4 py-2 leading-none border rounded-lg text-white mx-2 lg:mt-0 cursor-pointer"
+        onClick={() => admin?.updateSwitchChain(DEFAULT_CHAIN)}
+      >
+        Network Error
+      </div>
+    );
+  } else if (admin?.isConnected && admin?.isSupported && !admin?.isAdmin) {
+    return (
+      <div
+        id="networkError"
+        className="inline-block text-xl px-4 py-2 leading-none border rounded-lg text-white mx-2 lg:mt-0 cursor-pointer"
+      >
+        Access Denied
+      </div>
+    );
+  }
+  return (
+    <ButtonConnect />
+  );
+};
 
-const Navbar = () => {
+
+const Navbar: FC = () => {
   
   return (<div className="flex flex-col">
   <div className="navbar bg-custom-navbar w-full lg:mx-auto justify-between items-center font-bold lg:px-8 py-3">
@@ -15,7 +57,7 @@ const Navbar = () => {
       </div>
     </div>
     <div className="lg:flex navbar-end">
-      <ButtonConnect />
+      <CheckConnectWallet />
     </div>
   </div>
 </div>

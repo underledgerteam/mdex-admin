@@ -1,14 +1,25 @@
-import React, { useContext, Fragment } from "react";
+import React, { useContext, Fragment, FC } from "react";
+import ButtonConnect from "../components/ButtonConnect";
+
 import TransferModal from "../components/TransferModal";
 import { AdminContext } from "../context/AdminContext";
 import Transactions from "../components/Transactions";
 import Card from "../components/shared/Card";
-import Treasury from "../components/Treasury";
+
 
 import InputSelectNetwork from "../components/shared/InputSelectNetwork";
-import { SWAP_CONTRACTS } from "../utils/constants";
+import { SWAP_CONTRACTS, DEFAULT_CHAIN } from "../utils/constants";
+import AccessDenied from "../components/AccessDenied";
 
-const Home = () => {
+const CheckConnectWallet: FC = () => {
+  const admin = useContext(AdminContext);
+  if (admin?.isConnected && !admin?.isAdmin) {
+    return <AccessDenied />;
+  }
+  return <ButtonConnect />;
+};
+
+const Home: FC = () => {
   const admin = useContext(AdminContext);
   const listOptionNetwork = Object.keys(SWAP_CONTRACTS).map((key) => {
     return {
@@ -32,14 +43,13 @@ const Home = () => {
       <Card className="glass w-full md:w-3/4 overflow-visible lg:overflow-hidden">
         <Fragment>
           <div className="w-full min-h-[600px] text-center">
-            {admin?.adminAccount && admin?.isAdmin && (
+            {admin?.adminAccount && admin?.isAdmin ? (
               <>
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="">
-                    {/* <Treasury /> */}
+                  <div className="col-span-2 lg:col-span-1">
                     <TransferModal />
                   </div>
-                  <div>
+                  <div className="col-span-2 lg:col-span-1">
                     <InputSelectNetwork
                       listOption={listOptionNetwork}
                       selectionUpdate={"Select Network"}
@@ -50,6 +60,8 @@ const Home = () => {
 
                 <Transactions />
               </>
+            ) : (
+              <CheckConnectWallet />
             )}
           </div>
         </Fragment>
