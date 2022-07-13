@@ -27,7 +27,7 @@ code {
   }
   
 .btn-transfer {
-  @apply font-bold text-lg text-white bg-gradient-to-r from-custom-purple1 to-custom-blue1 rounded;
+  @apply font-bold text-lg text-white bg-gradient-to-r from-custom-purple1 to-custom-blue1 rounded border-none;
 }
   
   .btn-transfer:hover {
