@@ -19,10 +19,18 @@ code {
 
 
 .btn-connect {
-    @apply font-bold text-xl text-white bg-gradient-to-r from-custom-purple1 to-custom-blue1 rounded;
-  }
+  @apply font-bold text-xl text-white bg-gradient-to-r from-custom-purple1 to-custom-blue1 rounded;
+}
   
   .btn-connect:hover {
+    @apply from-custom-purple1/80 to-custom-blue1/80;
+  }
+  
+.btn-transfer {
+  @apply font-bold text-lg text-white bg-gradient-to-r from-custom-purple1 to-custom-blue1 rounded;
+}
+  
+  .btn-transfer:hover {
     @apply from-custom-purple1/80 to-custom-blue1/80;
   }
   

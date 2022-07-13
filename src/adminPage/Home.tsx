@@ -41,8 +41,8 @@ const Home: FC = () => {
         {admin?.adminAccount && admin?.isAdmin ? (
           <>
           <div className="grid grid-cols-2 gap-4">
-            <div><TransferModal/></div>
-            <div>
+            <div className="col-span-2 lg:col-span-1"><TransferModal/></div>
+            <div className="col-span-2 lg:col-span-1">
               <InputSelectNetwork 
                 listOption={listOptionNetwork}
                 selectionUpdate={"Select Network"}
