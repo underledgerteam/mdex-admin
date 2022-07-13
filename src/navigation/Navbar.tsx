@@ -1,13 +1,10 @@
-import { useContext } from "react";
-import { AdminContext } from "../context/AdminContext";
-import { shortenAddress } from "../utils/shortenAddress.util";
-
 // Assets
 import MdexLogo from "../assets/images/logo/mdex_logo.png";
 import ButtonConnect from "../components/ButtonConnect";
 
+
+
 const Navbar = () => {
-  const admin = useContext(AdminContext);
   
   return (<div className="flex flex-col">
   <div className="navbar bg-custom-navbar w-full lg:mx-auto justify-between items-center font-bold lg:px-8 py-3">
@@ -18,15 +15,7 @@ const Navbar = () => {
       </div>
     </div>
     <div className="lg:flex navbar-end">
-    {admin?.adminAccount ? (
-      <div
-        id="walletAddress"
-        className="inline-block text-xl px-4 py-2 leading-none border rounded-lg text-white mx-2 lg:mt-0 cursor-pointer"
-        onClick={() => { }}
-      >
-        {shortenAddress(admin?.adminAccount)}
-      </div>
-      ) : ( <ButtonConnect /> )}
+      <ButtonConnect />
     </div>
   </div>
 </div>

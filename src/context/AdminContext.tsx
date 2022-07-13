@@ -12,6 +12,7 @@ type AdminContextProviderType = {
   errorMessage: string;
   adminBalance: string;
   currentNetwork: number | string;
+  isConnected: boolean;
   isSupported: boolean;
   isAdmin: boolean;
   handleFormData: (item: { addressTo: string; amount: string }) => void;
@@ -33,6 +34,7 @@ export const AdminContextProvider = ({
   children,
 }: AdminContextProviderProps) => {
   const [adminAccount, setAdminAccount] = useState<string>("");
+  const [isConnected, setIsConnected] = useState(false);
   const [adminBalance, setAdminBalance] = useState<string>(""); // for test case before get treasury
   const [isSupported, setIsSupported] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -87,6 +89,8 @@ export const AdminContextProvider = ({
         console.log(accounts[0]);
         setAdminBalance(ethers.utils.formatEther(balance));
         setCurrentNetwork(currentChain);
+        setCurrentNetwork(currentChain);
+        setIsConnected(true);
         setIsSupported(SUPPORT_CHAIN.includes(chainId));
         setIsAdmin(ADMIN_WALLET.includes(accounts[0]));
 
@@ -164,6 +168,7 @@ export const AdminContextProvider = ({
         setAdminAccount(accounts[0]);
         setAdminBalance(ethers.utils.formatEther(balance));
         setCurrentNetwork(currentChain);
+        setIsConnected(true);
         setIsSupported(SUPPORT_CHAIN.includes(chainId));
         setIsAdmin(ADMIN_WALLET.includes(accounts[0]));
 
@@ -242,7 +247,8 @@ export const AdminContextProvider = ({
         currentNetwork,
         updateSwitchChain,
         isSupported,
-        isAdmin
+        isAdmin,
+        isConnected
       }}
     >
       {children}

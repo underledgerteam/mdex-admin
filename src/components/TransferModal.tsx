@@ -52,9 +52,13 @@ const TransferModal = () => {
 
   return (
     <>
+    <div className="input-group">
+      <span className="bg-white">Balance</span>
+      <span className="input input-bordered bg-white justify-end w-1/3" >1,000 USDT</span>
       <button className="btn btn-connect" onClick={openModalHandler}>
-        Transfer
+      🔀 Transfer
       </button>
+    </div>
       <input type="checkbox" id="transfer-modal" className="modal-toggle" />
       <div className="modal" id="transfer-modal">
         <div className="modal-box">
