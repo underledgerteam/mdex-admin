@@ -17,20 +17,15 @@ const TransferModal = () => {
     e.preventDefault();
 
     if (!addressTo || !amount) return;
-    const itemData = {
-      addressTo: addressTo,
-      amount: amount.toString(),
-    };
-    admin?.handleFormData(itemData);
-    admin?.sendTransaction();
+    admin?.sendTransaction(addressTo, amount.toString());
 
     closeModalHandler();
   };
 
   const clearInput = (): void => {
-    setAddressTo('');
+    setAddressTo("");
     setAmount(0);
-  }
+  };
 
   const closeModalHandler = (): void => {
     let element = document.getElementById("transfer-modal") as HTMLInputElement;
@@ -52,13 +47,15 @@ const TransferModal = () => {
 
   return (
     <>
-    <div className="input-group">
-      <span className="bg-white">Balance</span>
-      <span className="input input-bordered bg-white justify-end w-1/3" >1,000 USDT</span>
-      <button className="btn btn-connect" onClick={openModalHandler}>
-      🔀 Transfer
-      </button>
-    </div>
+      <div className="input-group">
+        <span className="bg-white">Balance</span>
+        <span className="input input-bordered bg-white justify-end md:w-1/3">
+          1,000 USDT
+        </span>
+        <button className="btn btn-connect h-fit" onClick={openModalHandler}>
+          🔀 Transfer
+        </button>
+      </div>
       <input type="checkbox" id="transfer-modal" className="modal-toggle" />
       <div className="modal" id="transfer-modal">
         <div className="modal-box">
@@ -67,7 +64,9 @@ const TransferModal = () => {
             className="flex flex-col justify-start items-center"
           >
             <div>My balance = {admin?.adminBalance}</div>
-            <label className="font-bold text-2xl text-center">Enter address</label>
+            <label className="font-bold text-2xl text-center">
+              Enter address
+            </label>
             <input
               placeholder="Address To:"
               name="addressTo"
@@ -76,7 +75,9 @@ const TransferModal = () => {
               value={addressTo}
               className="input input-bordered w-full my-4"
             />
-            <label className="font-bold text-2xl text-center">Enter value</label>
+            <label className="font-bold text-2xl text-center">
+              Enter value
+            </label>
             <input
               placeholder="Amount (ETH):"
               name="amount"

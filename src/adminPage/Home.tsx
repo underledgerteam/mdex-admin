@@ -1,9 +1,9 @@
 import React, { useContext, Fragment } from "react";
-import ButtonConnect from "../components/ButtonConnect";
 import TransferModal from "../components/TransferModal";
 import { AdminContext } from "../context/AdminContext";
 import Transactions from "../components/Transactions";
 import Card from "../components/shared/Card";
+import Treasury from "../components/Treasury";
 
 import InputSelectNetwork from "../components/shared/InputSelectNetwork";
 import { SWAP_CONTRACTS } from "../utils/constants";
@@ -35,7 +35,8 @@ const Home = () => {
             {admin?.adminAccount && admin?.isAdmin && (
               <>
                 <div className="grid grid-cols-2 gap-4">
-                  <div>
+                  <div className="">
+                    {/* <Treasury /> */}
                     <TransferModal />
                   </div>
                   <div>

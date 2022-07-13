@@ -2,6 +2,7 @@ import React, { useEffect, useState, createContext } from "react";
 import { ethers } from "ethers";
 import { SWAP_CONTRACTS, SUPPORT_CHAIN, ADMIN_WALLET } from "../utils/constants";
 import { DangerNotification } from "../components/shared/Notification";
+import { isConstructorDeclaration } from "typescript";
 
 declare var window: any; // telling the TypeScript compiler to treat window as of type any hence ignore any warnings.
 
@@ -15,10 +16,9 @@ type AdminContextProviderType = {
   isConnected: boolean;
   isSupported: boolean;
   isAdmin: boolean;
-  handleFormData: (item: { addressTo: string; amount: string }) => void;
   connectWallet: () => Promise<void>;
   checkIfWalletIsConnected: () => Promise<void>;
-  sendTransaction: () => Promise<void>;
+  sendTransaction: (addressTo: string, amount: string) => Promise<void>;
   updateSwitchChain: (value: string | number)=>void;
 };
 
@@ -40,13 +40,6 @@ export const AdminContextProvider = ({
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [currentNetwork, setCurrentNetwork] = useState<number | string>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [formData, setFormData] = useState<{
-    addressTo: string;
-    amount: string;
-  }>({
-    addressTo: "",
-    amount: "",
-  });
 
   const changeHandler = (account: string | any): void => {
 
@@ -56,10 +49,6 @@ export const AdminContextProvider = ({
     }
     else { setErrorMessage("Access denied");
     }
-  };
-
-  const handleFormData = (item: { addressTo: string; amount: string }) => {
-    setFormData(item);
   };
 
   const getAdminBalance = async (account: string) => {
@@ -182,12 +171,12 @@ export const AdminContextProvider = ({
     }
   };
 
-  const sendTransaction = async (): Promise<void> => {
+  const sendTransaction = async (addressTo: string, amount: string): Promise<void> => {
+    console.log("before try")
     try {
-      
+      console.log("before if ethereum")
       if (!ethereum) return alert("Please install metamask");
 
-      const { addressTo, amount } = formData;
       console.log("before parseAmount")
       const parsedAmount = ethers.utils.parseEther(amount);
       console.log("I'm here!")
@@ -240,7 +229,6 @@ export const AdminContextProvider = ({
         adminAccount,
         errorMessage,
         adminBalance,
-        handleFormData,
         connectWallet,
         checkIfWalletIsConnected,
         sendTransaction,
