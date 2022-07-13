@@ -33,8 +33,8 @@ const CheckConnectWallet: FC = () => {
   } else if (admin?.isConnected && admin?.isSupported && !admin?.isAdmin) {
     return (
       <div
-        id="networkError"
-        className="inline-block text-xl px-4 py-2 leading-none border rounded-lg text-white mx-2 lg:mt-0 cursor-pointer"
+        id="accessDenied"
+        className="inline-block text-xl px-4 py-2 leading-none border rounded-lg text-white mx-2 lg:mt-0"
       >
         Access Denied
       </div>
