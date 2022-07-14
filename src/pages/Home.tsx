@@ -8,7 +8,7 @@ import Card from "../components/shared/Card";
 
 
 import InputSelectNetwork from "../components/shared/InputSelectNetwork";
-import { SWAP_CONTRACTS, DEFAULT_CHAIN } from "../utils/constants";
+import { SWAP_CONTRACTS } from "../utils/constants";
 import AccessDenied from "../components/AccessDenied";
 
 const CheckConnectWallet: FC = () => {
