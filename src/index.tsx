@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AdminContextProvider } from "./context/AdminContext";
+import { ActionProvider } from "./context/action.context";
 import { NotifierContextProvider } from 'react-headless-notifier';
 
 const root = ReactDOM.createRoot(
@@ -19,9 +20,9 @@ root.render(
       }}
     >
       <AdminContextProvider>
-        <React.StrictMode>
+        <ActionProvider>
           <App />
-        </React.StrictMode>
+        </ActionProvider>
       </AdminContextProvider>
     </NotifierContextProvider>
   </React.StrictMode>
