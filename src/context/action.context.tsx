@@ -9,6 +9,10 @@ import Decimal from 'decimal.js';
 import { useNotifier } from 'react-headless-notifier';
 import { DangerNotification } from '../components/shared/Notification'
 
+// ABI
+import MULTISIX_ABI from '../utils/Multisix.json'
+import CALL_ABI from '../utils/CallToken.json'
+
 declare var window: any;
 
 const { ethereum } = window;
