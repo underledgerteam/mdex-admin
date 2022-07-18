@@ -1,15 +1,16 @@
 import React, { useContext, Fragment, FC } from "react";
 import ButtonConnect from "../components/ButtonConnect";
 
-import TransferModal from "../components/TransferModal";
 import { AdminContext } from "../context/AdminContext";
 import Transactions from "../components/Transactions";
 import Card from "../components/shared/Card";
 
-
 import InputSelectNetwork from "../components/shared/InputSelectNetwork";
-import { SWAP_CONTRACTS } from "../utils/constants";
 import AccessDenied from "../components/AccessDenied";
+import TransferSection from "src/components/TransferSection";
+import TransferModal from "src/components/TransferModal";
+
+import { SWAP_CONTRACTS } from "../utils/constants";
 
 const CheckConnectWallet: FC = () => {
   const admin = useContext(AdminContext);
@@ -21,6 +22,12 @@ const CheckConnectWallet: FC = () => {
 
 const Home: FC = () => {
   const admin = useContext(AdminContext);
+
+  const openModalHandler = (): void => {
+    let element = document.getElementById("transfer-modal") as HTMLInputElement;
+    element.checked = true;
+  };
+
   const listOptionNetwork = Object.keys(SWAP_CONTRACTS).map((key) => {
     return {
       value: key,
@@ -28,7 +35,7 @@ const Home: FC = () => {
         <Fragment>
           <img
             className="mask mask-squircle mr-1"
-            alt=""
+            alt="tokenSymbol"
             src={SWAP_CONTRACTS[Number(key)].SYMBOL}
             width={30}
           />{" "}
@@ -47,7 +54,7 @@ const Home: FC = () => {
               <>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2 lg:col-span-1">
-                    <TransferModal />
+                    <TransferSection balance={"1000"} token={"USDT"} onClickButton={openModalHandler} />
                   </div>
                   <div className="col-span-2 lg:col-span-1">
                     <InputSelectNetwork
@@ -66,6 +73,7 @@ const Home: FC = () => {
           </div>
         </Fragment>
       </Card>
+      <TransferModal />
     </div>
   );
 };
