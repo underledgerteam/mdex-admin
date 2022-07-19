@@ -116,6 +116,8 @@ export const ADMIN_WALLET: string[] = [
 
 export const DEFAULT_CHAIN: number = RINKEBY;
 
+export const TEST_TOKEN_ADDRESS: string = "0x3FFc03F05D1869f493c7dbf913E636C6280e0ff9";
+
 export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
   4: {
     NETWORK_NAME: "Rinkeby Testnet Network",
@@ -127,3 +129,5 @@ export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     ABI: multiSigWalletABI
   }
 };
+
+export const MULTI_SIG_DECIMAL_SET: number = 6;
