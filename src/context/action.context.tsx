@@ -29,7 +29,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const [balance, setBalance] = useState(0);
 
 
-  const getMultisixBalance = async() => {
+  const getMultiSigBalance = async() => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const { chainId } = await provider.getNetwork();
@@ -48,7 +48,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
 
   useEffect(() => {
     const init = async () => {
-      await getMultisixBalance();
+      await getMultiSigBalance();
     };
     init();
   },[]);
