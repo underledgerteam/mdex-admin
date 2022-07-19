@@ -1,17 +1,21 @@
 export interface SWAP_CONTRACTS_INTERFACE {
-    [key: number] : {
-      NETWORK_NAME: string,
-      NETWORK_SHORT_NAME: string,
+  [key: number]: {
+    NETWORK_NAME: string,
+    NETWORK_SHORT_NAME: string,
+    SYMBOL: string,
+    CHAIN_NAME: string,
+    CURRENCY_SYMBOL: string,
+
+    NATIVE_CURRENCY?: {
+      NAME: string,
       SYMBOL: string,
-      CHAIN_NAME: string,
-      CURRENCY_SYMBOL: string,
-  
-      NATIVE_CURRENCY?: {
-        NAME: string,
-        SYMBOL: string,
-        DECIMALS: number
-      },
-      RPC_URLS?: string[],
-      BLOCK_EXPLORER_URLS?: string[],
-    }
+      DECIMALS: number;
+    },
+
+    RPC_URLS?: string[],
+    BLOCK_EXPLORER_URLS?: string[],
+
+    ADDRESS: string,
+    ABI: Array<object>;
   };
+};
