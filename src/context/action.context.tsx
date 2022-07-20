@@ -91,6 +91,21 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
     }
   };
 
+  const executeTransaction = async (txnId: number): Promise<void> => {
+    try {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const { chainId } = await provider.getNetwork();
+
+      const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[chainId];
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
+      const response = await contract.executeTransaction({ transactionId: txnId });
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const init = async () => {
       await getMultiSigBalance();
