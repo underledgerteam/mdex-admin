@@ -40,18 +40,33 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       const tokenBalanceInEther = ethers.utils.formatUnits(tokenBalance, tokenUnits);
 
       setBalance(Number(parseFloat(tokenBalanceInEther).toFixed(MULTI_SIG_DECIMAL_SET)));
-      
+
     } catch (error) {
       // console.log(error);
     }
-  }
+  };
+
+  const voteConfirmTransaction = async (txnId: number): Promise<void> => {
+    try {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const { chainId } = await provider.getNetwork();
+
+      const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[chainId];
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
+      const response = await contract.confirmTransaction({ transactionId: txnId });
+      // onSuccess call getAllTransaction
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     const init = async () => {
       await getMultiSigBalance();
     };
     init();
-  },[]);
+  }, []);
 
 
   return (
