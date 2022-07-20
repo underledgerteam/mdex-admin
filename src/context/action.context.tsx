@@ -2,20 +2,14 @@ import { useState, useEffect, createContext, useContext } from "react";
 import { ethers, utils } from "ethers";
 import dayjs from "dayjs";
 // context
-
 import { AdminContext } from "./AdminContext";
 import {
   ActionContextInterface,
   ActionProviderInterface,
   TransactionInterface
 } from "../types/contexts/action.context";
-
-// ABI
-import MULTISIG_ABI from "../utils/MultiSigWalletABI.json"
-
 // constants
-import { MULTI_SIG_WALLET_CONTRACTS, MULTI_SIG_DECIMAL_SET } from "../utils/constants";
-var MULTISIG_Address = "0x392B676BAA75f5c24296B3F18991667D90756c4e";
+import { MULTI_SIG_WALLET_CONTRACTS } from "../utils/constants";
 
 declare var window: any;
 const { ethereum } = window;
@@ -178,7 +172,6 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
   useEffect(() => {
     const init = async () => {
       await getTransactions();
-
     };
     init();
   }, []);
