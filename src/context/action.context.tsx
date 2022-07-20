@@ -2,17 +2,12 @@ import { useState, useEffect, createContext, useContext } from "react";
 import { ethers, utils } from "ethers";
 import dayjs from "dayjs";
 // context
-
 import { AdminContext } from "./AdminContext";
 import {
   ActionContextInterface,
   ActionProviderInterface,
   TransactionInterface
 } from "../types/contexts/action.context";
-
-// ABI
-import MULTISIG_ABI from "../utils/MultiSigWalletABI.json"
-
 // constants
 import { MULTI_SIG_WALLET_CONTRACTS, MULTI_SIG_DECIMAL_SET, TRANSACTION_STATUS } from "../utils/constants";
 var MULTISIG_Address = "0x392B676BAA75f5c24296B3F18991667D90756c4e";
@@ -70,7 +65,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         signer
       );
       let transaction = await multisigContract.getTransactions();
-      normalizedTransaction(transaction);
+      setTransaction(normalizedTransaction(transaction));
     } catch (error) {
       console.error("GetTransaction", error);
     }
@@ -92,10 +87,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
           ethers.BigNumber.from(transaction[i].numConfirmations).toString()
           
         )
-      )
+      );
     }
-
-    setTransaction(arrayTransactions);
+    return arrayTransactions;
   };
 
   const submitTransaction = async (to: string, value: number) => {
@@ -118,7 +112,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
     }
   };
 
-  const voteConfirmTransaction = async (txnId: number): Promise<void> => {
+  const voteConfirmTransaction = async (transactionId: number): Promise<void> => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const { chainId } = await provider.getNetwork();
@@ -126,14 +120,13 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[chainId];
       const signer = provider.getSigner();
       const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
-      const response = await contract.confirmTransaction(txnId);
-      // onSuccess call getAllTransaction
+      await contract.confirmTransaction(transactionId, { gasLimit: 100000 });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const voteNotConfirmTransaction = async (txnId: number): Promise<void> => {
+  const voteNotConfirmTransaction = async (transactionId: number): Promise<void> => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const { chainId } = await provider.getNetwork();
@@ -141,14 +134,13 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[chainId];
       const signer = provider.getSigner();
       const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
-      const response = await contract.noConfirmTransaction(txnId);
-
+      await contract.noConfirmTransaction(transactionId, { gasLimit: 100000 });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const cancelTransaction = async (txnId: number): Promise<void> => {
+  const cancelTransaction = async (transactionId: number): Promise<void> => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const { chainId } = await provider.getNetwork();
@@ -156,14 +148,13 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[chainId];
       const signer = provider.getSigner();
       const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
-      const response = await contract.cancelTransaction({ transactionId: txnId });
-
+      await contract.cancelTransaction(transactionId, { gasLimit: 100000 });
     } catch (error) {
       console.log(error);
     }
   };
 
-  const executeTransaction = async (txnId: number): Promise<void> => {
+  const executeTransaction = async (transactionId: number): Promise<void> => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const { chainId } = await provider.getNetwork();
@@ -171,8 +162,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[chainId];
       const signer = provider.getSigner();
       const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
-      const response = await contract.executeTransaction({ transactionId: txnId });
-
+      await contract.executeTransaction(transactionId, { gasLimit: 100000 });
     } catch (error) {
       console.log(error);
     }

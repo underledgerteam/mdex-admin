@@ -128,7 +128,7 @@ export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
   }
 };
 
-export const MULTI_SIG_DECIMAL_SET: number = 10;
+export const MULTI_SIG_DECIMAL_SET: number = 2;
 
 export const TRANSACTION_STATUS: TRANSACTION_STATUS_INTERFACE = {
   0: "WAITING", // approver see Yes,No
