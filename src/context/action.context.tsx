@@ -122,8 +122,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[chainId];
       const signer = provider.getSigner();
       const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
-      const response = await contract.confirmTransaction({ transactionId: txnId });
+      await contract.confirmTransaction({ transactionId: txnId });
       // onSuccess call getAllTransaction
+      await getTransactions();
     } catch (error) {
       console.log(error);
     }
