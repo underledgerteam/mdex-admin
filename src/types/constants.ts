@@ -15,3 +15,4 @@ export interface SWAP_CONTRACTS_INTERFACE {
       BLOCK_EXPLORER_URLS?: string[],
     }
   };
+

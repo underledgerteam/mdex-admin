@@ -20,6 +20,7 @@ type AdminContextProviderType = {
   checkIfWalletIsConnected: () => Promise<void>;
   sendTransaction: (addressTo: string, amount: string) => Promise<void>;
   updateSwitchChain: (value: string | number)=>void;
+  delayPhase: (addressTo: string, amount: string) => Promise<void>;
 };
 
 type AdminContextProviderProps = {
@@ -40,6 +41,8 @@ export const AdminContextProvider = ({
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [currentNetwork, setCurrentNetwork] = useState<number | string>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const [test, setTest] = useState<string>("");
 
   const changeHandler = (account: string | any): void => {
 
@@ -75,10 +78,9 @@ export const AdminContextProvider = ({
         const balance = await provider.getBalance(accounts[0]);
       
         setAdminAccount(accounts[0]);
-        console.log(accounts[0]);
         setAdminBalance(ethers.utils.formatEther(balance));
         setCurrentNetwork(currentChain);
-        setCurrentNetwork(currentChain);
+   
         setIsConnected(true);
         setIsSupported(SUPPORT_CHAIN.includes(chainId));
         setIsAdmin(ADMIN_WALLET.includes(accounts[0]));
@@ -171,15 +173,19 @@ export const AdminContextProvider = ({
     }
   };
 
-  const sendTransaction = async (addressTo: string, amount: string): Promise<void> => {
-    console.log("before try")
-    try {
-      console.log("before if ethereum")
-      if (!ethereum) return alert("Please install metamask");
+  const delayPhase = async (addressTo: string, amount: string): Promise<void> => {
+    setTimeout(() => {
+      console.log('hello world');
+      sendTransaction(addressTo, amount);
+    }, 1000);
+    
+  }
 
-      console.log("before parseAmount")
+  const sendTransaction = async (addressTo: string, amount: string): Promise<void> => {
+    try {
+      if (!ethereum) return alert("Please install metamask");
       const parsedAmount = ethers.utils.parseEther(amount);
-      console.log("I'm here!")
+     
       await ethereum.request({
         method: "eth_sendTransaction",
         params: [
@@ -192,7 +198,7 @@ export const AdminContextProvider = ({
         ],
       });
 
-      window.reload();
+      // window.reload();
     } catch (error) {
       console.log(error);
 
@@ -236,7 +242,8 @@ export const AdminContextProvider = ({
         updateSwitchChain,
         isSupported,
         isAdmin,
-        isConnected
+        isConnected,
+        delayPhase
       }}
     >
       {children}
