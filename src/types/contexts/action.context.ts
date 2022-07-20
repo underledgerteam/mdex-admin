@@ -19,6 +19,6 @@ export interface TransactionInterface {
   to: string;
   value: string;
   timestamp: string;
-  status: number;
-  vote: number;
+  status: string;
+  vote: string;
 }

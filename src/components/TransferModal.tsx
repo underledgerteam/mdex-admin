@@ -35,8 +35,6 @@ const TransferModal = () => {
     clearInput();
   };
 
-  
-
   useEffect(() => {
     const checkData = amount !== 0 && amount <= Number(admin?.adminBalance);
     setFormValid(checkData);

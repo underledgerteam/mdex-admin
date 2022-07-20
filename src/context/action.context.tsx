@@ -14,7 +14,7 @@ import {
 import MULTISIG_ABI from "../utils/MultiSigWalletABI.json"
 
 // constants
-import { MULTI_SIG_WALLET_CONTRACTS, MULTI_SIG_DECIMAL_SET } from "../utils/constants";
+import { MULTI_SIG_WALLET_CONTRACTS, MULTI_SIG_DECIMAL_SET, TRANSACTION_STATUS } from "../utils/constants";
 var MULTISIG_Address = "0x392B676BAA75f5c24296B3F18991667D90756c4e";
 
 declare var window: any;
@@ -37,14 +37,15 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const admin = useContext(AdminContext);
   const [action, setAction] = useState("");
   const [transaction, setTransaction] = useState<TransactionInterface[]>([]);
-
+  
   const transactionFactory = (
     id: string,
     caller: string,
     to: string,
     value: string,
     timestamp: string,
-    status: number
+    status: string,
+    vote: string
   ) => {
     return {
       id: id,
@@ -53,7 +54,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       value: value,
       timestamp: timestamp,
       status: status,
-      vote: 0,
+      vote: vote,
     };
   };
 
@@ -69,7 +70,6 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         signer
       );
       let transaction = await multisigContract.getTransactions();
-
       normalizedTransaction(transaction);
     } catch (error) {
       console.error("GetTransaction", error);
@@ -88,7 +88,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
           dayjs
             .unix(ethers.BigNumber.from(transaction[i].timestamp).toNumber())
             .format("DD/MM/YYYY"),
-          transaction[i].status
+            TRANSACTION_STATUS[transaction[i].status],
+          ethers.BigNumber.from(transaction[i].numConfirmations).toString()
+          
         )
       )
     }
@@ -124,7 +126,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[chainId];
       const signer = provider.getSigner();
       const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
-      const response = await contract.confirmTransaction({ transactionId: txnId });
+      const response = await contract.confirmTransaction(txnId);
       // onSuccess call getAllTransaction
     } catch (error) {
       console.log(error);
@@ -139,7 +141,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[chainId];
       const signer = provider.getSigner();
       const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
-      const response = await contract.noConfirmTransaction({ transactionId: txnId });
+      const response = await contract.noConfirmTransaction(txnId);
 
     } catch (error) {
       console.log(error);
@@ -179,7 +181,6 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
   useEffect(() => {
     const init = async () => {
       await getTransactions();
-
     };
     init();
   }, []);
