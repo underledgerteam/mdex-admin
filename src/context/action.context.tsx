@@ -16,9 +16,9 @@ import { useNotifier } from "react-headless-notifier";
 import { DangerNotification } from "../components/shared/Notification";
 
 // ABI
-import MULTISIG_ABI from "../utils/Multisig.json";
 import CALL_ABI from "../utils/CallToken.json";
 import { id } from "ethers/lib/utils";
+import MULTISIG_ABI from "../utils/MultiSigWalletABI.json"
 
 // constants
 import { MULTI_SIG_WALLET_CONTRACTS, TEST_TOKEN_ADDRESS, MULTI_SIG_DECIMAL_SET } from "../utils/constants";

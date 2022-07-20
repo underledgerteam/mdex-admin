@@ -23,11 +23,12 @@ const CheckConnectWallet: FC = () => {
 
 const Home: FC = () => {
   const admin = useContext(AdminContext);
-  const { balance } = useContext(ActionContext);
+  const { balance, transaction } = useContext(ActionContext);
 
   const openModalHandler = (): void => {
     let element = document.getElementById("transfer-modal") as HTMLInputElement;
     element.checked = true;
+    console.log(transaction)
   };
 
   const listOptionNetwork = Object.keys(SWAP_CONTRACTS).map((key) => {
