@@ -21,7 +21,7 @@ import { id } from "ethers/lib/utils";
 import MULTISIG_ABI from "../utils/MultiSigWalletABI.json"
 
 // constants
-import { MULTI_SIG_WALLET_CONTRACTS, TEST_TOKEN_ADDRESS, MULTI_SIG_DECIMAL_SET } from "../utils/constants";
+import { MULTI_SIG_WALLET_CONTRACTS, MULTI_SIG_DECIMAL_SET } from "../utils/constants";
 
 declare var window: any;
 var MULTISIG_Address = "0x392B676BAA75f5c24296B3F18991667D90756c4e";
@@ -116,28 +116,10 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
   };
 
   const [balance, setBalance] = useState(0);
-
-
-  const getMultiSigBalance = async() => {
-    try {
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const { chainId } = await provider.getNetwork();
-
-      const testTokenContract = new ethers.Contract(TEST_TOKEN_ADDRESS, CALL_ABI, provider);
-      const tokenBalance = await testTokenContract.balanceOf(MULTI_SIG_WALLET_CONTRACTS[chainId].ADDRESS);
-      const tokenUnits = await testTokenContract.decimals();
-      const tokenBalanceInEther = ethers.utils.formatUnits(tokenBalance, tokenUnits);
-
-      setBalance(Number(parseFloat(tokenBalanceInEther).toFixed(MULTI_SIG_DECIMAL_SET)));
-      
-    } catch (error) {
-      // console.log(error);
-    }
-  }
+  
 
   useEffect(() => {
     const init = async () => {
-      await getMultiSigBalance();
       await getTransactions();
       
     };

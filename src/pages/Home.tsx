@@ -57,7 +57,7 @@ const Home: FC = () => {
               <>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2 lg:col-span-1">
-                    <TransferSection balance={balance} token={"USDT"} onClickButton={openModalHandler} />
+                    <TransferSection balance={admin.adminBalance} token={"USDT"} onClickButton={openModalHandler} />
                   </div>
                   <div className="col-span-2 lg:col-span-1">
                     <InputSelectNetwork
