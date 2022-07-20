@@ -19,3 +19,7 @@ export interface SWAP_CONTRACTS_INTERFACE {
     ABI: Array<object>;
   };
 };
+
+export interface TRANSACTION_STATUS_INTERFACE {
+  [key: number]: string;
+};

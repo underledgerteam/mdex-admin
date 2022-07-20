@@ -1,4 +1,4 @@
-import { SWAP_CONTRACTS_INTERFACE } from "../types/constants";
+import { SWAP_CONTRACTS_INTERFACE, TRANSACTION_STATUS_INTERFACE } from "../types/constants";
 import multiSigWalletABI from "src/utils/MultiSigWalletABI.json";
 import callTokenABI from "src/utils/CallToken.json";
 
@@ -131,3 +131,11 @@ export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
 };
 
 export const MULTI_SIG_DECIMAL_SET: number = 6;
+
+export const TRANSACTION_STATUS: TRANSACTION_STATUS_INTERFACE = {
+  0: "WATING",
+  1: "READY",
+  2: "QUEUE",
+  3: "FAIL",
+  4: "SUCCESS"
+};
