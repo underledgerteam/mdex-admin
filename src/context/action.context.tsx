@@ -10,7 +10,6 @@ import {
 } from "../types/contexts/action.context";
 // constants
 import { MULTI_SIG_WALLET_CONTRACTS, MULTI_SIG_DECIMAL_SET, TRANSACTION_STATUS } from "../utils/constants";
-var MULTISIG_Address = "0x392B676BAA75f5c24296B3F18991667D90756c4e";
 
 declare var window: any;
 const { ethereum } = window;
