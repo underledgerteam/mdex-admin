@@ -17,7 +17,7 @@ const { ethereum } = window;
 
 const defaultValue: ActionContextInterface = {
   transaction: [],
-  action: "",
+  treasuryBalance: 0,
   getTransactions: async () => { },
   submitTransaction: async (to: string, value: number) => { },
   voteConfirmTransaction: async () => { },
@@ -30,7 +30,7 @@ export const ActionContext = createContext<ActionContextInterface>(defaultValue)
 
 export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const admin = useContext(AdminContext);
-  const [action, setAction] = useState("");
+  const [treasuryBalance, setTreasuryBalance] = useState(0);
   const [transaction, setTransaction] = useState<TransactionInterface[]>([]);
   
   const transactionFactory = (
@@ -51,6 +51,23 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       status: status,
       vote: vote,
     };
+  };
+
+  const getTreasuryBalance = async (): Promise<void> => {
+    try {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const { chainId } = await provider.getNetwork();
+
+      const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[chainId];
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
+      const response = await contract.getBalance();
+      const treasuryBalanceInEther = ethers.utils.formatUnits(response);
+      setTreasuryBalance(Number(parseFloat(treasuryBalanceInEther).toFixed(MULTI_SIG_DECIMAL_SET)));
+
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getTransactions = async () => {
@@ -175,10 +192,19 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
     init();
   }, []);
 
+  useEffect(() => {
+    const init = async () => {
+      await getTreasuryBalance();
+    };
+    if (admin?.isConnected) {
+      init();
+    }
+  }, [admin?.isConnected, admin?.adminAccount]);
+
   return (
     <ActionContext.Provider
       value={{
-        action,
+        treasuryBalance,
         transaction,
         getTransactions,
         submitTransaction,
