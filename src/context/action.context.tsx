@@ -69,8 +69,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         signer
       );
       let transaction = await multisigContract.getTransactions();
-
-      normalizedTransaction(transaction);
+      setTransaction(normalizedTransaction(transaction));
     } catch (error) {
       console.error("GetTransaction", error);
     }
@@ -90,10 +89,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
             .format("DD/MM/YYYY"),
           transaction[i].status
         )
-      )
+      );
     }
-
-    setTransaction(arrayTransactions);
+    return arrayTransactions;
   };
 
   const submitTransaction = async (to: string, value: number) => {
