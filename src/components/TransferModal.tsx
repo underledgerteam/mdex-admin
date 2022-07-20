@@ -1,8 +1,10 @@
 import { useState, useContext, useEffect } from "react";
 import { AdminContext } from "../context/AdminContext";
+import { ActionContext } from "../context/action.context";
 
 const TransferModal = () => {
   const admin = useContext(AdminContext);
+  const {getTransactions, submitTransaction} = useContext(ActionContext);
   const [addressTo, setAddressTo] = useState<string>("");
   const [formValid, setFormValid] = useState<boolean>(false);
   const [amount, setAmount] = useState<number>(0);
@@ -17,7 +19,7 @@ const TransferModal = () => {
     e.preventDefault();
 
     if (!addressTo || !amount) return;
-    admin?.sendTransaction(addressTo, amount.toString());
+    submitTransaction(addressTo, amount);
 
     closeModalHandler();
   };
@@ -32,6 +34,8 @@ const TransferModal = () => {
     element.checked = false;
     clearInput();
   };
+
+  
 
   useEffect(() => {
     const checkData = amount !== 0 && amount <= Number(admin?.adminBalance);

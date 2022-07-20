@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { SWAP_CONTRACTS, SUPPORT_CHAIN, ADMIN_WALLET, MULTI_SIG_WALLET_CONTRACTS, MULTI_SIG_DECIMAL_SET } from "../utils/constants";
 import { DangerNotification } from "../components/shared/Notification";
 
+
 declare var window: any; // telling the TypeScript compiler to treat window as of type any hence ignore any warnings.
 
 const { ethereum } = window;
@@ -165,7 +166,7 @@ export const AdminContextProvider = ({
         ],
       });
 
-      window.reload();
+      // window.reload();
     } catch (error) {
       console.log(error);
 

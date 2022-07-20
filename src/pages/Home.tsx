@@ -2,6 +2,7 @@ import React, { useContext, Fragment, FC } from "react";
 import ButtonConnect from "../components/ButtonConnect";
 
 import { AdminContext } from "../context/AdminContext";
+import { ActionContext } from "src/context/action.context";
 import Transactions from "../components/Transactions";
 import Card from "../components/shared/Card";
 
@@ -22,6 +23,7 @@ const CheckConnectWallet: FC = () => {
 
 const Home: FC = () => {
   const admin = useContext(AdminContext);
+  const { transaction } = useContext(ActionContext);
 
   const openModalHandler = (): void => {
     let element = document.getElementById("transfer-modal") as HTMLInputElement;

@@ -1,6 +1,9 @@
-import React from 'react';
+import {useContext} from 'react';
+import { ActionContext } from "../context/action.context";
 
 const Transactions = () => {
+  const {getTransactions} = useContext(ActionContext)
+  let transactions = "";
   return (
     <div className="mt-10">
       <div className="overflow-x-auto">
@@ -18,9 +21,12 @@ const Transactions = () => {
             </tr>
           </thead>
           <tbody>
+            {(
             <tr className="text-center">
-              <td colSpan={8}>No results found.</td>
+              { 1 &&
+              (<td colSpan={8}>No results found.</td>)}
             </tr>
+            )}
           </tbody>
         </table>
       </div>
