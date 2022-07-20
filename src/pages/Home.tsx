@@ -2,7 +2,6 @@ import React, { useContext, Fragment, FC } from "react";
 import ButtonConnect from "../components/ButtonConnect";
 
 import { AdminContext } from "../context/AdminContext";
-import { ActionContext } from "src/context/action.context";
 import Transactions from "../components/Transactions";
 import Card from "../components/shared/Card";
 
@@ -23,7 +22,6 @@ const CheckConnectWallet: FC = () => {
 
 const Home: FC = () => {
   const admin = useContext(AdminContext);
-  const { balance } = useContext(ActionContext);
 
   const openModalHandler = (): void => {
     let element = document.getElementById("transfer-modal") as HTMLInputElement;
@@ -56,7 +54,7 @@ const Home: FC = () => {
               <>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2 lg:col-span-1">
-                    <TransferSection balance={balance} token={"USDT"} onClickButton={openModalHandler} />
+                    <TransferSection balance={admin.adminBalance} token={"USDT"} onClickButton={openModalHandler} />
                   </div>
                   <div className="col-span-2 lg:col-span-1">
                     <InputSelectNetwork

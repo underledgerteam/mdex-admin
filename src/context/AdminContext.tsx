@@ -1,6 +1,6 @@
 import React, { useEffect, useState, createContext } from "react";
 import { ethers } from "ethers";
-import { SWAP_CONTRACTS, SUPPORT_CHAIN, ADMIN_WALLET, MULTI_SIG_WALLET_CONTRACTS } from "../utils/constants";
+import { SWAP_CONTRACTS, SUPPORT_CHAIN, ADMIN_WALLET, MULTI_SIG_WALLET_CONTRACTS, MULTI_SIG_DECIMAL_SET } from "../utils/constants";
 import { DangerNotification } from "../components/shared/Notification";
 
 declare var window: any; // telling the TypeScript compiler to treat window as of type any hence ignore any warnings.
@@ -10,7 +10,7 @@ const { ethereum } = window;
 type AdminContextProviderType = {
   adminAccount: string;
   errorMessage: string;
-  adminBalance: string;
+  adminBalance: number;
   currentNetwork: number | string;
   isConnected: boolean;
   isSupported: boolean;
@@ -34,34 +34,11 @@ export const AdminContextProvider = ({
 }: AdminContextProviderProps) => {
   const [adminAccount, setAdminAccount] = useState<string>("");
   const [isConnected, setIsConnected] = useState(false);
-  const [adminBalance, setAdminBalance] = useState<string>(""); // for test case before get treasury
+  const [adminBalance, setAdminBalance] = useState<number>(0); 
   const [isSupported, setIsSupported] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [currentNetwork, setCurrentNetwork] = useState<number | string>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
-
-  const changeHandler = (account: string | any): void => {
-
-    if (isAdmin) {
-      setAdminAccount(account);
-      getAdminBalance(account);
-    }
-    else {
-      setErrorMessage("Access denied");
-    }
-  };
-
-  const getAdminBalance = async (account: string) => {
-    try {
-      const balance = await ethereum.request({ method: 'eth_getBalance', params: [account, 'latest'] });
-
-      setAdminBalance(ethers.utils.formatEther(balance));
-    } catch (error) {
-      console.log(error);
-
-      throw new Error("No ethereum object.");
-    }
-  };
 
   const connectWallet = async (): Promise<void> => {
     try {
@@ -72,16 +49,14 @@ export const AdminContextProvider = ({
       const accounts = await provider.send("eth_requestAccounts", []);// use this line of code, it just request account, not try to connect MetaMask
       const currentChain = await myNetwork();
       const { chainId } = await provider.getNetwork();
-      const balance = await provider.getBalance(accounts[0]);
 
       setAdminAccount(accounts[0]);
-      console.log(accounts[0]);
-      setAdminBalance(ethers.utils.formatEther(balance));
       setCurrentNetwork(currentChain);
       setCurrentNetwork(currentChain);
       setIsConnected(true);
       setIsSupported(SUPPORT_CHAIN.includes(chainId));
       setIsAdmin(ADMIN_WALLET.includes(accounts[0]));
+      await getTreasuryBalance();
 
     } catch (error) {
       console.log(error);
@@ -151,11 +126,9 @@ export const AdminContextProvider = ({
 
       const provider = new ethers.providers.Web3Provider(ethereum);
       const { chainId } = await provider.getNetwork();
-      const balance = await provider.getBalance(accounts[0]);
 
       if (accounts.length) {
         setAdminAccount(accounts[0]);
-        setAdminBalance(ethers.utils.formatEther(balance));
         setCurrentNetwork(currentChain);
         setIsConnected(true);
         setIsSupported(SUPPORT_CHAIN.includes(chainId));
@@ -218,6 +191,8 @@ export const AdminContextProvider = ({
       const signer = provider.getSigner();
       const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
       const response = await contract.getBalance();
+      const treasuryBalanceInEther = ethers.utils.formatUnits(response);
+      setAdminBalance(Number(parseFloat(treasuryBalanceInEther).toFixed(MULTI_SIG_DECIMAL_SET)))
     } catch (error) {
       console.log(error);
     }

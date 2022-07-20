@@ -47,7 +47,6 @@ const TransferModal = () => {
             onSubmit={handleSubmit}
             className="flex flex-col justify-start items-center"
           >
-            <div>My balance = {admin?.adminBalance}</div>
             <label className="font-bold text-2xl text-center">
               Enter address
             </label>
