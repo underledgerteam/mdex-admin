@@ -1,8 +1,8 @@
 import React, { useEffect, useState, createContext } from "react";
 import { ethers } from "ethers";
-import { SWAP_CONTRACTS, SUPPORT_CHAIN, ADMIN_WALLET } from "../utils/constants";
+import { SWAP_CONTRACTS, SUPPORT_CHAIN, ADMIN_WALLET, MULTI_SIG_WALLET_CONTRACTS} from "../utils/constants";
 import { DangerNotification } from "../components/shared/Notification";
-import { isConstructorDeclaration } from "typescript";
+
 
 declare var window: any; // telling the TypeScript compiler to treat window as of type any hence ignore any warnings.
 
@@ -19,8 +19,7 @@ type AdminContextProviderType = {
   connectWallet: () => Promise<void>;
   checkIfWalletIsConnected: () => Promise<void>;
   sendTransaction: (addressTo: string, amount: string) => Promise<void>;
-  updateSwitchChain: (value: string | number)=>void;
-  delayPhase: (addressTo: string, amount: string) => Promise<void>;
+  updateSwitchChain: (value: string | number) => void;
 };
 
 type AdminContextProviderProps = {
@@ -42,35 +41,34 @@ export const AdminContextProvider = ({
   const [currentNetwork, setCurrentNetwork] = useState<number | string>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const [test, setTest] = useState<string>("");
-
   const changeHandler = (account: string | any): void => {
 
-    if (isAdmin){
+    if (isAdmin) {
       setAdminAccount(account);
       getAdminBalance(account);
     }
-    else { setErrorMessage("Access denied");
+    else {
+      setErrorMessage("Access denied");
     }
   };
 
   const getAdminBalance = async (account: string) => {
     try {
-    const balance = await ethereum.request({method: 'eth_getBalance', params: [account, 'latest']})
-    
+      const balance = await ethereum.request({ method: 'eth_getBalance', params: [account, 'latest'] });
+
       setAdminBalance(ethers.utils.formatEther(balance));
-    } catch(error) {
-      console.log(error)
-      
+    } catch (error) {
+      console.log(error);
+
       throw new Error("No ethereum object.");
     }
-  }
+  };
 
   const connectWallet = async (): Promise<void> => {
     try {
       if (!ethereum) return alert("Please install metamask");
 
-        const provider = new ethers.providers.Web3Provider(ethereum);
+      const provider = new ethers.providers.Web3Provider(ethereum);
 
         const accounts = await provider.send("eth_requestAccounts", []);// use this line of code, it just request account, not try to connect MetaMask
         const currentChain = await myNetwork();
@@ -91,15 +89,15 @@ export const AdminContextProvider = ({
       throw new Error("No ethereum object.");
     }
   };
-  
+
 
   // Chain Network
-  const myNetwork = async() => {
+  const myNetwork = async () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const { chainId } = await provider.getNetwork();
     return chainId;
   };
-  const updateSwitchChain = async(chain: string | number) => {
+  const updateSwitchChain = async (chain: string | number) => {
     const beforeSwitchSwapObj = currentNetwork;
     try {
       await walletSwitchChain(Number(chain));
@@ -108,7 +106,7 @@ export const AdminContextProvider = ({
       setCurrentNetwork(beforeSwitchSwapObj);
       <DangerNotification
         message={error.toString()}
-      />
+      />;
     }
   };
   const walletSwitchChain = async (chainId: number): Promise<void> => {
@@ -150,7 +148,7 @@ export const AdminContextProvider = ({
 
       const accounts = await ethereum.request({ method: "eth_accounts" });// use this line of code, it just request account, not try to connect MetaMask
       const currentChain = await myNetwork();
-       
+
       const provider = new ethers.providers.Web3Provider(ethereum);
       const { chainId } = await provider.getNetwork();
       const balance = await provider.getBalance(accounts[0]);
@@ -173,19 +171,15 @@ export const AdminContextProvider = ({
     }
   };
 
-  const delayPhase = async (addressTo: string, amount: string): Promise<void> => {
-    setTimeout(() => {
-      console.log('hello world');
-      sendTransaction(addressTo, amount);
-    }, 1000);
-    
-  }
-
   const sendTransaction = async (addressTo: string, amount: string): Promise<void> => {
+    console.log("before try");
     try {
+      console.log("before if ethereum");
       if (!ethereum) return alert("Please install metamask");
+
+      console.log("before parseAmount");
       const parsedAmount = ethers.utils.parseEther(amount);
-     
+      console.log("I'm here!");
       await ethereum.request({
         method: "eth_sendTransaction",
         params: [
@@ -216,6 +210,19 @@ export const AdminContextProvider = ({
     window.location.reload();
   };
 
+
+  const getTreasuryBalance = async () => {
+    try {
+      const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[Number(currentNetwork)];
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
+      const response = await contract.getBalance();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     const init = async () => {
       await checkIfWalletIsConnected();
@@ -227,7 +234,16 @@ export const AdminContextProvider = ({
       ethereum?.removeListener("accountsChanged", handleAccountChange);
       ethereum?.removeListener("chainChanged", handleChainChange);
     };
-  },[adminAccount]);
+  }, [adminAccount]);
+
+  useEffect(() => {
+    const init = async () => {
+      await getTreasuryBalance();
+    };
+    if (isConnected) {
+      init();
+    }
+  }, [isConnected, adminAccount]);
 
   return (
     <AdminContext.Provider
@@ -242,8 +258,7 @@ export const AdminContextProvider = ({
         updateSwitchChain,
         isSupported,
         isAdmin,
-        isConnected,
-        delayPhase
+        isConnected
       }}
     >
       {children}

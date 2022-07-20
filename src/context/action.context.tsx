@@ -6,7 +6,7 @@ import { AdminContext } from "./AdminContext";
 import {
   ActionContextInterface,
   ActionProviderInterface,
-  ActionType,
+  TransactionInterface
 } from "../types/contexts/action.context";
 
 import Decimal from "decimal.js";
@@ -20,15 +20,19 @@ import MULTISIG_ABI from "../utils/Multisig.json";
 import CALL_ABI from "../utils/CallToken.json";
 import { id } from "ethers/lib/utils";
 
+// constants
+import { MULTI_SIG_WALLET_CONTRACTS, TEST_TOKEN_ADDRESS, MULTI_SIG_DECIMAL_SET } from "../utils/constants";
+
 declare var window: any;
 var MULTISIG_Address = "0x392B676BAA75f5c24296B3F18991667D90756c4e";
 const { ethereum } = window;
 
 const defaultValue: ActionContextInterface = {
+  transaction: [],
   action: "",
-  transactions: [],
   getTransactions: async () => {},
   submitTransaction: async (to: string, value: number) => {},
+  balance: 0
 };
 
 export const ActionContext =
@@ -37,6 +41,7 @@ export const ActionContext =
 export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const admin = useContext(AdminContext);
   const [action, setAction] = useState("");
+  const [transaction, setTransaction] = useState<TransactionInterface[]>([]);
   const transactionFactory = (
     id: string,
     caller: string,
@@ -47,7 +52,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
   ) => {
     return {
       id: id,
-      from: caller,
+      caller: caller,
       to: to,
       value: value,
       timestamp: timestamp,
@@ -66,13 +71,13 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       );
       let transaction = await multisigContract.getTransactions();
       
-      return setTransaction(transaction);
+      normalizedTransaction(transaction);
     } catch (error) {
       console.error("GetTransaction", error);
     }
   };
 
-  const setTransaction = (transaction: any) => {
+  const normalizedTransaction = (transaction: any) => {
     let arrayTransactions = [];
     for (let i = 0; i < transaction.length; i++) {
       arrayTransactions.push(
@@ -89,7 +94,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       )
     }
 
-    return arrayTransactions;
+    setTransaction(arrayTransactions);
   };
 
   const submitTransaction = async (to: string, value: number) => {
@@ -110,13 +115,44 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
     }
   };
 
+  const [balance, setBalance] = useState(0);
+
+
+  const getMultiSigBalance = async() => {
+    try {
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const { chainId } = await provider.getNetwork();
+
+      const testTokenContract = new ethers.Contract(TEST_TOKEN_ADDRESS, CALL_ABI, provider);
+      const tokenBalance = await testTokenContract.balanceOf(MULTI_SIG_WALLET_CONTRACTS[chainId].ADDRESS);
+      const tokenUnits = await testTokenContract.decimals();
+      const tokenBalanceInEther = ethers.utils.formatUnits(tokenBalance, tokenUnits);
+
+      setBalance(Number(parseFloat(tokenBalanceInEther).toFixed(MULTI_SIG_DECIMAL_SET)));
+      
+    } catch (error) {
+      // console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    const init = async () => {
+      await getMultiSigBalance();
+      await getTransactions();
+      
+    };
+    init();
+  },[]);
+
+
   return (
     <ActionContext.Provider
       value={{
         action,
-        transactions: [],
+        transaction,
         getTransactions,
         submitTransaction,
+        balance,
       }}
     >
       {children}

@@ -1,16 +1,21 @@
 export interface ActionContextInterface {
-    action: string
-    transactions: {id: number, caller: string, to: string, value: string, timestamp: Date, status: number, vote: number}[]
-    getTransactions: () => {}
-    submitTransaction: (to: string, value: number) => {}
+  action: string;
+  transaction: TransactionInterface[]
+  getTransactions: () => {};
+  submitTransaction: (to: string, value: number) => {};
+  balance: string | number;
 }
 
 export interface ActionProviderInterface {
-    children: JSX.Element
-};
+  children: JSX.Element;
+}
 
-export type ActionType = {
-    [key: string]: {
-        test?: string,
-    }
-};
+export interface TransactionInterface {
+  id: string;
+  caller: string;
+  to: string;
+  value: string;
+  timestamp: string;
+  status: number;
+  vote: number;
+}

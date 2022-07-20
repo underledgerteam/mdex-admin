@@ -1,4 +1,6 @@
 import { SWAP_CONTRACTS_INTERFACE } from "../types/constants";
+import multiSigWalletABI from "src/utils/MultiSigWalletABI.json";
+import callTokenABI from "src/utils/CallToken.json";
 
 export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
   4: {
@@ -7,6 +9,8 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     SYMBOL: "chian/ethereum.png",
     CHAIN_NAME: "Ethereum",
     CURRENCY_SYMBOL: "ETH",
+    ADDRESS: "",
+    ABI: callTokenABI
   },
   421611: {
     NETWORK_NAME: "Arbitrum Testnet",
@@ -22,6 +26,9 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     },
     RPC_URLS: ["https://rinkeby.arbitrum.io/rpc"],
     BLOCK_EXPLORER_URLS: ["https://rinkeby-explorer.arbitrum.io/#/"],
+
+    ADDRESS: "",
+    ABI: callTokenABI
   },
   43113: {
     NETWORK_NAME: "AVAX Testnet Network",
@@ -37,6 +44,9 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     },
     RPC_URLS: ["https://api.avax-test.network/ext/bc/C/rpc"],
     BLOCK_EXPLORER_URLS: ["https://testnet.snowtrace.io/"],
+
+    ADDRESS: "",
+    ABI: callTokenABI
   },
   80001: {
     NETWORK_NAME: "Polygon Testnet Network",
@@ -52,6 +62,9 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     },
     RPC_URLS: ["https://matic-mumbai.chainstacklabs.com/"],
     BLOCK_EXPLORER_URLS: ["https://mumbai.polygonscan.com/"],
+
+    ADDRESS: "",
+    ABI: callTokenABI
   },
   97: {
     NETWORK_NAME: "Binance Smart Chain Testnet",
@@ -67,6 +80,9 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     },
     RPC_URLS: ["https://data-seed-prebsc-1-s1.binance.org:8545"],
     BLOCK_EXPLORER_URLS: ["https://explorer.binance.org/smart-testnet"],
+
+    ADDRESS: "",
+    ABI: callTokenABI
   },
 };
 
@@ -99,3 +115,19 @@ export const ADMIN_WALLET: string[] = [
 ];
 
 export const DEFAULT_CHAIN: number = RINKEBY;
+
+export const TEST_TOKEN_ADDRESS: string = "0x3FFc03F05D1869f493c7dbf913E636C6280e0ff9";
+
+export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
+  4: {
+    NETWORK_NAME: "Rinkeby Testnet Network",
+    NETWORK_SHORT_NAME: "Rinkeby",
+    SYMBOL: "chian/ethereum.png",
+    CHAIN_NAME: "Ethereum",
+    CURRENCY_SYMBOL: "ETH",
+    ADDRESS: "0x392B676BAA75f5c24296B3F18991667D90756c4e",
+    ABI: multiSigWalletABI
+  }
+};
+
+export const MULTI_SIG_DECIMAL_SET: number = 6;
