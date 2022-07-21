@@ -31,38 +31,38 @@ const Transactions: FC = () => {
           </thead>
           <tbody>
             {transaction.length > 1 ? (
-              transaction.map((transactions) => {
+              transaction.map((txn) => {
                 return (
-                  <tr key={`${transactions.id}`} className="text-center">
-                    <td>{transactions.id}</td>
-                    <td>{shortenAddress(transactions.caller)}</td>
-                    <td>{shortenAddress(transactions.to)}</td>
-                    <td>{transactions.value}</td>
-                    <td>{transactions.timestamp}</td>
-                    <td>{transactions.status}</td>
-                    <td>{transactions.vote}</td>
+                  <tr key={`${txn.id}`} className="text-center">
+                    <td>{txn.id}</td>
+                    <td>{shortenAddress(txn.caller)}</td>
+                    <td>{shortenAddress(txn.to)}</td>
+                    <td>{txn.value}</td>
+                    <td>{txn.timestamp}</td>
+                    <td>{txn.status}</td>
+                    <td>{txn.vote}</td>
                     <td>
                       {
-                        transactions.status === "WAITING" ?
-                          (admin?.adminAccount != transactions.caller.toLowerCase() && (
+                        txn.status === "WAITING" ?
+                          (admin?.adminAccount != txn.caller.toLowerCase() && (
                             <>
-                              <button className="btn mx-2" onClick={() => { voteConfirmTransaction(Number(transactions.id)); }}>Yes</button>
-                              <button className="btn mx-2" onClick={() => { voteNotConfirmTransaction(Number(transactions.id)); }}>No</button>
+                              <button className="btn mx-2" onClick={() => voteConfirmTransaction(txn.id)}>Yes</button>
+                              <button className="btn mx-2" onClick={() => voteNotConfirmTransaction(txn.id)}>No</button>
                             </>
                           )) :
-                          transactions.status === "READY" ?
-                            (admin?.adminAccount != transactions.caller.toLowerCase() && (
+                          txn.status === "READY" ?
+                            (admin?.adminAccount != txn.caller.toLowerCase() && (
                               <>
-                                <button className="btn" onClick={() => executeTransaction(transactions.id)}>Execute</button>
+                                <button className="btn" onClick={() => executeTransaction(txn.id)}>Execute</button>
                               </>
                             )) :
-                            transactions.status === "QUEUE" ?
+                            txn.status === "QUEUE" ?
                               (<>
-                                <button className="btn" onClick={() => cancelTransaction(transactions.id)}>Cancel</button>
+                                <button className="btn" onClick={() => cancelTransaction(txn.id)}>Cancel</button>
                               </>) :
-                              transactions.status === "FAIL" ?
+                              txn.status === "FAIL" ?
                                 ("Fail") :
-                                transactions.status === "SUCCESS" ?
+                                txn.status === "SUCCESS" ?
                                   ("Success") : ("Error")
                       }
                     </td>
