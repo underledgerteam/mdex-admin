@@ -15,7 +15,7 @@ declare var window: any;
 const { ethereum } = window;
 
 const defaultValue: ActionContextInterface = {
-  transaction: [],
+  transactions: [],
   treasuryBalance: 0,
   getTransactions: async () => { },
   submitTransaction: async (to: string, value: number) => { },
@@ -30,16 +30,16 @@ export const ActionContext = createContext<ActionContextInterface>(defaultValue)
 export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const admin = useContext(AdminContext);
   const [treasuryBalance, setTreasuryBalance] = useState(0);
-  const [transaction, setTransaction] = useState<TransactionInterface[]>([]);
-  
+  const [transactions, setTransactions] = useState<TransactionInterface[]>([]);
+
   const transactionFactory = (
-    id: string,
+    id: number,
     caller: string,
     to: string,
     value: string,
     timestamp: string,
     status: string,
-    vote: string
+    vote: number
   ) => {
     return {
       id: id,
@@ -80,28 +80,27 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         MULTI_SIG_WALLET_CONTRACTS[chainId].ABI,
         signer
       );
-      let transaction = await multisigContract.getTransactions();
-      setTransaction(normalizedTransaction(transaction));
+      let transactions = await multisigContract.getTransactions();
+      setTransactions(normalizedTransaction(transactions));
     } catch (error) {
       console.error("GetTransaction", error);
     }
   };
 
-  const normalizedTransaction = (transaction: any) => {
+  const normalizedTransaction = (transactions: any) => {
     let arrayTransactions = [];
-    for (let i = 0; i < transaction.length; i++) {
+    for (let txn of transactions) {
+      const countYes = ethers.BigNumber.from(txn.numConfirmations).toNumber();
+      const countNo = ethers.BigNumber.from(txn.numNoConfirmations).toNumber();
       arrayTransactions.push(
         transactionFactory(
-          ethers.BigNumber.from(transaction[i].id).toString(),
-          transaction[i].caller,
-          transaction[i].to,
-          utils.formatEther(transaction[i].value),
-          dayjs
-            .unix(ethers.BigNumber.from(transaction[i].timestamp).toNumber())
-            .format("DD/MM/YYYY"),
-            TRANSACTION_STATUS[transaction[i].status],
-          ethers.BigNumber.from(transaction[i].numConfirmations).toString()
-          
+          ethers.BigNumber.from(txn.id).toNumber(),
+          txn.caller,
+          txn.to,
+          utils.formatEther(txn.value),
+          dayjs.unix(ethers.BigNumber.from(txn.timestamp).toNumber()).format("DD/MM/YYYY"),
+          TRANSACTION_STATUS[txn.status],
+          (countYes + countNo)
         )
       );
     }
@@ -204,7 +203,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
     <ActionContext.Provider
       value={{
         treasuryBalance,
-        transaction,
+        transactions,
         getTransactions,
         submitTransaction,
         voteConfirmTransaction,
