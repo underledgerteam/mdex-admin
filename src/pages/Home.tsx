@@ -23,7 +23,7 @@ const CheckConnectWallet: FC = () => {
 
 const Home: FC = () => {
   const admin = useContext(AdminContext);
-  const { transaction } = useContext(ActionContext);
+  const { transaction, treasuryBalance } = useContext(ActionContext);
 
   const openModalHandler = (): void => {
     let element = document.getElementById("transfer-modal") as HTMLInputElement;
@@ -56,7 +56,7 @@ const Home: FC = () => {
               <>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2 lg:col-span-1">
-                    <TransferSection balance={admin.adminBalance} token={"USDT"} onClickButton={openModalHandler} />
+                    <TransferSection balance={treasuryBalance} token={"USDT"} onClickButton={openModalHandler} />
                   </div>
                   <div className="col-span-2 lg:col-span-1">
                     <InputSelectNetwork

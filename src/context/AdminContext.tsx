@@ -11,7 +11,6 @@ const { ethereum } = window;
 type AdminContextProviderType = {
   adminAccount: string;
   errorMessage: string;
-  adminBalance: number;
   currentNetwork: number | string;
   isConnected: boolean;
   isSupported: boolean;
@@ -35,7 +34,6 @@ export const AdminContextProvider = ({
 }: AdminContextProviderProps) => {
   const [adminAccount, setAdminAccount] = useState<string>("");
   const [isConnected, setIsConnected] = useState(false);
-  const [adminBalance, setAdminBalance] = useState<number>(0); 
   const [isSupported, setIsSupported] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [currentNetwork, setCurrentNetwork] = useState<number | string>(0);
@@ -57,7 +55,6 @@ export const AdminContextProvider = ({
       setIsConnected(true);
       setIsSupported(SUPPORT_CHAIN.includes(chainId));
       setIsAdmin(ADMIN_WALLET.includes(accounts[0]));
-      await getTreasuryBalance();
 
     } catch (error) {
       console.log(error);
@@ -184,21 +181,6 @@ export const AdminContextProvider = ({
     window.location.reload();
   };
 
-
-  const getTreasuryBalance = async () => {
-    try {
-      const multiSigContract = MULTI_SIG_WALLET_CONTRACTS[Number(currentNetwork)];
-      const provider = new ethers.providers.Web3Provider(ethereum);
-      const signer = provider.getSigner();
-      const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
-      const response = await contract.getBalance();
-      const treasuryBalanceInEther = ethers.utils.formatUnits(response);
-      setAdminBalance(Number(parseFloat(treasuryBalanceInEther).toFixed(MULTI_SIG_DECIMAL_SET)))
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
     const init = async () => {
       await checkIfWalletIsConnected();
@@ -212,21 +194,11 @@ export const AdminContextProvider = ({
     };
   }, [adminAccount]);
 
-  useEffect(() => {
-    const init = async () => {
-      await getTreasuryBalance();
-    };
-    if (isConnected) {
-      init();
-    }
-  }, [isConnected, adminAccount]);
-
   return (
     <AdminContext.Provider
       value={{
         adminAccount,
         errorMessage,
-        adminBalance,
         connectWallet,
         checkIfWalletIsConnected,
         sendTransaction,

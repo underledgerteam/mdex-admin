@@ -1,5 +1,5 @@
 export interface ActionContextInterface {
-  action: string;
+  treasuryBalance: number;
   transaction: TransactionInterface[]
   getTransactions: () => {};
   submitTransaction: (to: string, value: number) => {};

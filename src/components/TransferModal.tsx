@@ -4,7 +4,7 @@ import { ActionContext } from "../context/action.context";
 
 const TransferModal = () => {
   const admin = useContext(AdminContext);
-  const {getTransactions, submitTransaction} = useContext(ActionContext);
+  const { getTransactions, submitTransaction, treasuryBalance } = useContext(ActionContext);
   const [addressTo, setAddressTo] = useState<string>("");
   const [formValid, setFormValid] = useState<boolean>(false);
   const [amount, setAmount] = useState<number>(0);
@@ -36,7 +36,7 @@ const TransferModal = () => {
   };
 
   useEffect(() => {
-    const checkData = amount !== 0 && amount <= Number(admin?.adminBalance);
+    const checkData = amount !== 0 && amount <= treasuryBalance;
     setFormValid(checkData);
   }, [amount]);
 
