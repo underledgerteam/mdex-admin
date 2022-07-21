@@ -10,7 +10,7 @@ const Transactions: FC = () => {
     voteConfirmTransaction,
     voteNotConfirmTransaction,
     cancelTransaction,
-    executeTransaction
+    executeTransaction,
   } = useContext(ActionContext);
   const admin = useContext(AdminContext);
 
@@ -68,8 +68,8 @@ const Transactions: FC = () => {
             </tr>
           </thead>
           <tbody>
-            {transactions.length > 1 ? (
-              transactions.map((txn) => {
+            {transactions.length > 0 ? (
+              transactions.slice(0).reverse().map((txn) => {
                 return (
                   <tr key={`${txn.id}`} className="text-center">
                     <td>{txn.id}</td>
