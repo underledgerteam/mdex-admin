@@ -9,6 +9,7 @@ const Transactions: FC = () => {
     voteConfirmTransaction,
     voteNotConfirmTransaction,
     cancelTransaction,
+    executeTransaction
   } = useContext(ActionContext);
   const admin = useContext(AdminContext);
 
@@ -52,7 +53,7 @@ const Transactions: FC = () => {
                           transactions.status === "READY" ?
                             (admin?.adminAccount != transactions.caller.toLowerCase() && (
                               <>
-                                <button className="btn">Execute</button>
+                                <button className="btn" onClick={() => executeTransaction(transactions.id)}>Execute</button>
                               </>
                             )) :
                             transactions.status === "QUEUE" ?
