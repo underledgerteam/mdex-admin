@@ -4,7 +4,12 @@ import { AdminContext } from "src/context/AdminContext";
 import { shortenAddress } from "../utils/shortenAddress.util";
 
 const Transactions: FC = () => {
-  const { transaction, voteConfirmTransaction, voteNotConfirmTransaction } = useContext(ActionContext);
+  const {
+    transaction,
+    voteConfirmTransaction,
+    voteNotConfirmTransaction,
+    cancelTransaction,
+  } = useContext(ActionContext);
   const admin = useContext(AdminContext);
 
   return (
@@ -52,7 +57,7 @@ const Transactions: FC = () => {
                             )) :
                             transactions.status === "QUEUE" ?
                               (<>
-                                <button className="btn">Cancel</button>
+                                <button className="btn" onClick={() => cancelTransaction(transactions.id)}>Cancel</button>
                               </>) :
                               transactions.status === "FAIL" ?
                                 ("Fail") :
