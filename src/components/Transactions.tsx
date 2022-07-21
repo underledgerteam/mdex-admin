@@ -4,7 +4,7 @@ import { AdminContext } from "src/context/AdminContext";
 import { shortenAddress } from "../utils/shortenAddress.util";
 
 const Transactions = () => {
-  const { transaction, voteConfirmTransaction, voteNotConfirmTransaction } =
+  const { transaction, voteConfirmTransaction, voteNotConfirmTransaction, executeTransaction } =
     useContext(ActionContext);
   const admin = useContext(AdminContext);
   return (
@@ -25,7 +25,7 @@ const Transactions = () => {
           </thead>
           <tbody>
             {transaction.length > 1 ? (
-              transaction.map((transactions) => {
+              transaction.slice(0).reverse().map((transactions) => {
                 return (
                   <tr className="text-center">
                     <td>{transactions.id}</td>
@@ -40,14 +40,14 @@ const Transactions = () => {
                         transactions.status === "WAITING" ?
                           (admin?.adminAccount != transactions.caller.toLowerCase() && (
                             <>
-                              <button className="btn mx-2" onClick={() => {voteConfirmTransaction(Number(transactions.id))}}>Yes</button>
-                              <button className="btn mx-2" onClick={() => {voteNotConfirmTransaction(Number(transactions.id))}}>No</button>
+                              <button className="btn mr-2" onClick={() => {voteConfirmTransaction(Number(transactions.id))}}>Yes</button>
+                              <button className="btn ml-2" onClick={() => {voteNotConfirmTransaction(Number(transactions.id))}}>No</button>
                             </>
                           )):
                           transactions.status === "READY" ?
-                            (admin?.adminAccount != transactions.caller.toLowerCase() && (
+                            (admin?.adminAccount === transactions.caller.toLowerCase() && (
                               <>
-                                <button className="btn">Execute</button>
+                                <button className="btn" onClick={() => {executeTransaction(Number(transactions.id))}}>Execute</button>
                               </>
                             )):
                             transactions.status === "QUEUE" ?
