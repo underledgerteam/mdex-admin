@@ -1,6 +1,6 @@
 export interface ActionContextInterface {
   treasuryBalance: number;
-  transaction: TransactionInterface[];
+  transactions: TransactionInterface[];
   getTransactions: () => {};
   submitTransaction: (to: string, value: number) => {};
   voteConfirmTransaction: (txnId: number) => {};

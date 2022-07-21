@@ -5,7 +5,7 @@ import { shortenAddress } from "../utils/shortenAddress.util";
 
 const Transactions: FC = () => {
   const {
-    transaction,
+    transactions,
     voteConfirmTransaction,
     voteNotConfirmTransaction,
     cancelTransaction,
@@ -30,8 +30,8 @@ const Transactions: FC = () => {
             </tr>
           </thead>
           <tbody>
-            {transaction.length > 1 ? (
-              transaction.map((txn) => {
+            {transactions.length > 1 ? (
+              transactions.map((txn) => {
                 return (
                   <tr key={`${txn.id}`} className="text-center">
                     <td>{txn.id}</td>

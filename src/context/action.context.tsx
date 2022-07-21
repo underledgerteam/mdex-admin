@@ -15,7 +15,7 @@ declare var window: any;
 const { ethereum } = window;
 
 const defaultValue: ActionContextInterface = {
-  transaction: [],
+  transactions: [],
   treasuryBalance: 0,
   getTransactions: async () => { },
   submitTransaction: async (to: string, value: number) => { },
@@ -30,7 +30,7 @@ export const ActionContext = createContext<ActionContextInterface>(defaultValue)
 export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const admin = useContext(AdminContext);
   const [treasuryBalance, setTreasuryBalance] = useState(0);
-  const [transaction, setTransaction] = useState<TransactionInterface[]>([]);
+  const [transactions, setTransactions] = useState<TransactionInterface[]>([]);
 
   const transactionFactory = (
     id: number,
@@ -80,8 +80,8 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         MULTI_SIG_WALLET_CONTRACTS[chainId].ABI,
         signer
       );
-      let transaction = await multisigContract.getTransactions();
-      setTransaction(normalizedTransaction(transaction));
+      let transactions = await multisigContract.getTransactions();
+      setTransactions(normalizedTransaction(transactions));
     } catch (error) {
       console.error("GetTransaction", error);
     }
@@ -203,7 +203,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
     <ActionContext.Provider
       value={{
         treasuryBalance,
-        transaction,
+        transactions,
         getTransactions,
         submitTransaction,
         voteConfirmTransaction,
