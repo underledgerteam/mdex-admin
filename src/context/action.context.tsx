@@ -32,26 +32,6 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const [treasuryBalance, setTreasuryBalance] = useState(0);
   const [transactions, setTransactions] = useState<TransactionInterface[]>([]);
 
-  const transactionFactory = (
-    id: number,
-    caller: string,
-    to: string,
-    value: string,
-    timestamp: string,
-    status: string,
-    vote: number
-  ) => {
-    return {
-      id: id,
-      caller: caller,
-      to: to,
-      value: value,
-      timestamp: timestamp,
-      status: status,
-      vote: vote,
-    };
-  };
-
   const getTreasuryBalance = async (): Promise<void> => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
@@ -81,28 +61,29 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         signer
       );
       let transactions = await multisigContract.getTransactions();
+      const isVotedArray = await Promise.all(transactions.map((txn: { id: number; }) => multisigContract.isConfirmed(txn.id, admin?.adminAccount)));
+      transactions = transactions.map((txn: any, index: number) => ({ ...txn, isVoted: isVotedArray[index] }));
       setTransactions(normalizedTransaction(transactions));
     } catch (error) {
       console.error("GetTransaction", error);
     }
   };
 
-  const normalizedTransaction = (transactions: any) => {
+  const normalizedTransaction = (transactions: any): TransactionInterface[] => {
     let arrayTransactions = [];
     for (let txn of transactions) {
       const countYes = ethers.BigNumber.from(txn.numConfirmations).toNumber();
       const countNo = ethers.BigNumber.from(txn.numNoConfirmations).toNumber();
-      arrayTransactions.push(
-        transactionFactory(
-          ethers.BigNumber.from(txn.id).toNumber(),
-          txn.caller,
-          txn.to,
-          utils.formatEther(txn.value),
-          dayjs.unix(ethers.BigNumber.from(txn.timestamp).toNumber()).format("DD/MM/YYYY"),
-          TRANSACTION_STATUS[txn.status],
-          (countYes + countNo)
-        )
-      );
+      arrayTransactions.push({
+        id: ethers.BigNumber.from(txn.id).toNumber(),
+        caller: txn.caller,
+        to: txn.to,
+        value: utils.formatEther(txn.value),
+        timestamp: dayjs.unix(ethers.BigNumber.from(txn.timestamp).toNumber()).format("DD/MM/YYYY"),
+        status: TRANSACTION_STATUS[txn.status],
+        vote: (countYes + countNo),
+        isVoted: txn.isVoted
+      });
     }
     return arrayTransactions;
   };
@@ -185,16 +166,10 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
 
   useEffect(() => {
     const init = async () => {
+      await getTreasuryBalance();
       await getTransactions();
     };
-    init();
-  }, []);
-
-  useEffect(() => {
-    const init = async () => {
-      await getTreasuryBalance();
-    };
-    if (admin?.isConnected) {
+    if (admin?.isConnected && admin?.adminAccount) {
       init();
     }
   }, [admin?.isConnected, admin?.adminAccount]);

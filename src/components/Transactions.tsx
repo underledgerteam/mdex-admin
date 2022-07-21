@@ -2,6 +2,7 @@ import { FC, useContext } from "react";
 import { ActionContext } from "../context/action.context";
 import { AdminContext } from "src/context/AdminContext";
 import { shortenAddress } from "../utils/shortenAddress.util";
+import { TransactionInterface } from "src/types/contexts/action.context";
 
 const Transactions: FC = () => {
   const {
@@ -12,6 +13,43 @@ const Transactions: FC = () => {
     executeTransaction
   } = useContext(ActionContext);
   const admin = useContext(AdminContext);
+
+  const renderVoteColumn = (txn: TransactionInterface) => {
+    const { id, caller, status, isVoted } = txn;
+    if (status === "WAITING") {
+      if (admin?.adminAccount != caller.toLowerCase() && !isVoted) {
+        return (
+          <>
+            <button className="btn mx-2" onClick={() => voteConfirmTransaction(id)}>Yes</button>
+            <button className="btn mx-2" onClick={() => voteNotConfirmTransaction(id)}>No</button>
+          </>
+        );
+      } else {
+        return ("Voted");
+      }
+    } else if (status === "READY") {
+      if (admin?.adminAccount === caller.toLowerCase()) {
+        return (
+          <>
+            <button className="btn" onClick={() => executeTransaction(txn.id)}>Execute</button>
+          </>
+        );
+      }
+    } else if (status === "QUEUE") {
+      return (
+        <>
+          <button className="btn" onClick={() => cancelTransaction(txn.id)}>Cancel</button>
+        </>
+      );
+    } else if (status === "FAIL") {
+      return ("Fail");
+    } else if (status === "SUCCESS") {
+      return ("Success");
+    } else {
+      return ("Error");
+    }
+    return null;
+  };
 
   return (
     <div className="mt-10">
@@ -41,31 +79,7 @@ const Transactions: FC = () => {
                     <td>{txn.timestamp}</td>
                     <td>{txn.status}</td>
                     <td>{txn.vote}</td>
-                    <td>
-                      {
-                        txn.status === "WAITING" ?
-                          (admin?.adminAccount != txn.caller.toLowerCase() && (
-                            <>
-                              <button className="btn mx-2" onClick={() => voteConfirmTransaction(txn.id)}>Yes</button>
-                              <button className="btn mx-2" onClick={() => voteNotConfirmTransaction(txn.id)}>No</button>
-                            </>
-                          )) :
-                          txn.status === "READY" ?
-                            (admin?.adminAccount != txn.caller.toLowerCase() && (
-                              <>
-                                <button className="btn" onClick={() => executeTransaction(txn.id)}>Execute</button>
-                              </>
-                            )) :
-                            txn.status === "QUEUE" ?
-                              (<>
-                                <button className="btn" onClick={() => cancelTransaction(txn.id)}>Cancel</button>
-                              </>) :
-                              txn.status === "FAIL" ?
-                                ("Fail") :
-                                txn.status === "SUCCESS" ?
-                                  ("Success") : ("Error")
-                      }
-                    </td>
+                    <td>{renderVoteColumn(txn)}</td>
                   </tr>
                 );
               })

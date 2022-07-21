@@ -21,4 +21,5 @@ export interface TransactionInterface {
   timestamp: string;
   status: string;
   vote: number;
+  isVoted: boolean;
 }
