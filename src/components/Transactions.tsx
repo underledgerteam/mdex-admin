@@ -55,9 +55,10 @@ const Transactions = () => {
                                 <button className="btn">Cancel</button>
                               </>):
                               transactions.status === "FAIL" ?
-                                ("") :
-                                  transactions.status === "SUCCESS" 
-                              
+                                ("Fail") :
+                                  transactions.status === "SUCCESS" ?
+                                    ("Success") : ("Error")
+      
                       }
                     </td>
                   </tr>
