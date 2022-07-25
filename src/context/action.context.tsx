@@ -1,6 +1,7 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import { ethers, utils } from "ethers";
 import dayjs from "dayjs";
+import { useNotifier } from 'react-headless-notifier';
 // context
 import { AdminContext } from "./AdminContext";
 import {
@@ -10,6 +11,7 @@ import {
 } from "../types/contexts/action.context";
 // constants
 import { MULTI_SIG_WALLET_CONTRACTS, MULTI_SIG_DECIMAL_SET, TRANSACTION_STATUS } from "../utils/constants";
+import { SuccessNotification, DangerNotification } from "../components/shared/Notification";
 
 declare var window: any;
 const { ethereum } = window;
@@ -29,6 +31,7 @@ export const ActionContext = createContext<ActionContextInterface>(defaultValue)
 
 export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const admin = useContext(AdminContext);
+  const { notify } = useNotifier();
   const [treasuryBalance, setTreasuryBalance] = useState(0);
   const [transactions, setTransactions] = useState<TransactionInterface[]>([]);
 
@@ -103,8 +106,10 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         to,
         ethers.utils.parseEther(value.toString())
       );
-    } catch (error) {
-      console.error("GetTransaction", error);
+    } catch (error: any) {
+      notify(<DangerNotification
+        message={error.message}
+      />);
     }
   };
 
@@ -117,8 +122,13 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       const signer = provider.getSigner();
       const contract = new ethers.Contract(multiSigContract.ADDRESS, multiSigContract.ABI, signer);
       await contract.confirmTransaction(transactionId, { gasLimit: 100000 });
-    } catch (error) {
-      console.log(error);
+      notify(<SuccessNotification
+        message={"You vote success"}
+      />);
+    } catch (error: any) {
+      notify(<DangerNotification
+        message={error.message}
+      />);
     }
   };
 
