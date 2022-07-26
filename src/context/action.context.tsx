@@ -14,6 +14,7 @@ import {
   MULTI_SIG_WALLET_CONTRACTS,
   MULTI_SIG_DECIMAL_SET,
   TRANSACTION_STATUS,
+  GAS_LIMIT
 } from "../utils/constants";
 import {
   SuccessNotification,
@@ -150,7 +151,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         multiSigContract.ABI,
         signer
       );
-      await contract.confirmTransaction(transactionId, { gasLimit: 100000 });
+      await contract.confirmTransaction(transactionId, { gasLimit: GAS_LIMIT });
       notify(<SuccessNotification message={"You vote success"} />);
     } catch (error: any) {
       notify(<DangerNotification message={error.message} />);
@@ -171,7 +172,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         multiSigContract.ABI,
         signer
       );
-      await contract.noConfirmTransaction(transactionId, { gasLimit: 100000 });
+      await contract.noConfirmTransaction(transactionId, { gasLimit: GAS_LIMIT });
       notify(<SuccessNotification message={"You vote no success"} />);
     } catch (error: any) {
       notify(<DangerNotification message={error.message} />);
@@ -190,7 +191,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         multiSigContract.ABI,
         signer
       );
-      await contract.cancelTransaction(transactionId, { gasLimit: 100000 });
+      await contract.cancelTransaction(transactionId, { gasLimit: GAS_LIMIT });
       notify(<SuccessNotification message={"You cancel success"} />);
     } catch (error: any) {
       notify(<DangerNotification message={error.message} />);
@@ -209,7 +210,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         multiSigContract.ABI,
         signer
       );
-      await contract.executeTransaction(transactionId, { gasLimit: 100000 });
+      await contract.executeTransaction(transactionId, { gasLimit: GAS_LIMIT });
       notify(<SuccessNotification message={"Transaction success"} />); // scan link
     } catch (error: any) {
       notify(<DangerNotification message={error.message} />);

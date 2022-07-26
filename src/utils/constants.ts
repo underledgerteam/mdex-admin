@@ -137,3 +137,5 @@ export const TRANSACTION_STATUS: TRANSACTION_STATUS_INTERFACE = {
   3: "FAIL",
   4: "SUCCESS"
 };
+
+export const GAS_LIMIT: number = 2100000;
