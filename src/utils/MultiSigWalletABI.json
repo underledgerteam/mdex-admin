@@ -5,11 +5,6 @@
         "internalType": "address[]",
         "name": "team",
         "type": "address[]"
-      },
-      {
-        "internalType": "address",
-        "name": "stableCoin",
-        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -102,19 +97,6 @@
     ],
     "name": "WithdrawETH",
     "type": "event"
-  },
-  {
-    "inputs": [],
-    "name": "_stableCoin",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
   },
   {
     "inputs": [
@@ -334,6 +316,32 @@
     "name": "setNumberOfRequire",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_stableCoin",
+        "type": "address"
+      }
+    ],
+    "name": "setStableCoin",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "stableCoin",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

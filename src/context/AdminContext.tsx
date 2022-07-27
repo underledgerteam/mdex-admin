@@ -1,8 +1,16 @@
 import React, { useEffect, useState, createContext } from "react";
 import { ethers } from "ethers";
-import { SWAP_CONTRACTS, SUPPORT_CHAIN, ADMIN_WALLET, MULTI_SIG_WALLET_CONTRACTS, MULTI_SIG_DECIMAL_SET } from "../utils/constants";
-import { DangerNotification } from "../components/shared/Notification";
-
+import {
+  SWAP_CONTRACTS,
+  SUPPORT_CHAIN,
+  ADMIN_WALLET,
+  MULTI_SIG_WALLET_CONTRACTS,
+  MULTI_SIG_DECIMAL_SET,
+} from "../utils/constants";
+import {
+  DangerNotification,
+  SuccessNotification,
+} from "../components/shared/Notification";
 
 declare var window: any; // telling the TypeScript compiler to treat window as of type any hence ignore any warnings.
 
@@ -45,7 +53,7 @@ export const AdminContextProvider = ({
 
       const provider = new ethers.providers.Web3Provider(ethereum);
 
-      const accounts = await provider.send("eth_requestAccounts", []);// use this line of code, it just request account, not try to connect MetaMask
+      const accounts = await provider.send("eth_requestAccounts", []); // use this line of code, it just request account, not try to connect MetaMask
       const currentChain = await myNetwork();
       const { chainId } = await provider.getNetwork();
 
@@ -55,14 +63,12 @@ export const AdminContextProvider = ({
       setIsConnected(true);
       setIsSupported(SUPPORT_CHAIN.includes(chainId));
       setIsAdmin(ADMIN_WALLET.includes(accounts[0]));
-
     } catch (error) {
       console.log(error);
 
       throw new Error("No ethereum object.");
     }
   };
-
 
   // Chain Network
   const myNetwork = async () => {
@@ -77,9 +83,7 @@ export const AdminContextProvider = ({
       setCurrentNetwork(chain);
     } catch (error: any) {
       setCurrentNetwork(beforeSwitchSwapObj);
-      <DangerNotification
-        message={error.toString()}
-      />;
+      <DangerNotification message={error.toString()} />;
     }
   };
   const walletSwitchChain = async (chainId: number): Promise<void> => {
@@ -87,31 +91,39 @@ export const AdminContextProvider = ({
       const provider = new ethers.providers.Web3Provider(ethereum);
       const currentChain = await myNetwork();
       if (chainId !== currentChain) {
-        await provider.send("wallet_switchEthereumChain", [{ chainId: ethers.utils.hexValue(chainId) }]);
+        await provider.send("wallet_switchEthereumChain", [
+          { chainId: ethers.utils.hexValue(chainId) },
+        ]);
+        <SuccessNotification message={"Switch success"} />;
       }
     } catch (error: any) {
       if (error.code === 4902) {
         await walletAddChain(chainId);
       }
+      <DangerNotification message={error.toString()} />;
       throw new Error("Can't Switch Chain");
     }
   };
   const walletAddChain = async (chainId: number): Promise<void> => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
-      await provider.send("wallet_addEthereumChain", [{
-        chainId: ethers.utils.hexValue(Number(chainId)),
-        chainName: SWAP_CONTRACTS[chainId].NETWORK_NAME,
-        nativeCurrency: {
-          name: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.NAME,
-          symbol: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.SYMBOL,
-          decimals: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.DECIMALS,
+      await provider.send("wallet_addEthereumChain", [
+        {
+          chainId: ethers.utils.hexValue(Number(chainId)),
+          chainName: SWAP_CONTRACTS[chainId].NETWORK_NAME,
+          nativeCurrency: {
+            name: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.NAME,
+            symbol: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.SYMBOL,
+            decimals: SWAP_CONTRACTS[chainId].NATIVE_CURRENCY!.DECIMALS,
+          },
+          rpcUrls: SWAP_CONTRACTS[chainId].RPC_URLS,
+          blockExplorerUrls: SWAP_CONTRACTS[chainId].BLOCK_EXPLORER_URLS,
         },
-        rpcUrls: SWAP_CONTRACTS[chainId].RPC_URLS,
-        blockExplorerUrls: SWAP_CONTRACTS[chainId].BLOCK_EXPLORER_URLS,
-      }]);
+      ]);
     } catch (error) {
-      throw new Error(`Can't Add ${SWAP_CONTRACTS[chainId].NETWORK_NAME} to Wallet`);
+      throw new Error(
+        `Can't Add ${SWAP_CONTRACTS[chainId].NETWORK_NAME} to Wallet`
+      );
     }
   };
 
@@ -119,7 +131,7 @@ export const AdminContextProvider = ({
     try {
       if (!ethereum) return alert("Please install metamask");
 
-      const accounts = await ethereum.request({ method: "eth_accounts" });// use this line of code, it just request account, not try to connect MetaMask
+      const accounts = await ethereum.request({ method: "eth_accounts" }); // use this line of code, it just request account, not try to connect MetaMask
       const currentChain = await myNetwork();
 
       const provider = new ethers.providers.Web3Provider(ethereum);
@@ -131,7 +143,6 @@ export const AdminContextProvider = ({
         setIsConnected(true);
         setIsSupported(SUPPORT_CHAIN.includes(chainId));
         setIsAdmin(ADMIN_WALLET.includes(accounts[0]));
-
       } else {
         console.log("No accounts found");
       }
@@ -142,7 +153,10 @@ export const AdminContextProvider = ({
     }
   };
 
-  const sendTransaction = async (addressTo: string, amount: string): Promise<void> => {
+  const sendTransaction = async (
+    addressTo: string,
+    amount: string
+  ): Promise<void> => {
     console.log("before try");
     try {
       console.log("before if ethereum");
@@ -206,7 +220,7 @@ export const AdminContextProvider = ({
         updateSwitchChain,
         isSupported,
         isAdmin,
-        isConnected
+        isConnected,
       }}
     >
       {children}
