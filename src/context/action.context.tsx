@@ -133,7 +133,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       );
       notify(<SuccessNotification message={"Submit Success"} />);
     } catch (error: any) {
-      notify(<DangerNotification message={error.code} />);
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
 
@@ -154,7 +156,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       await contract.confirmTransaction(transactionId, { gasLimit: GAS_LIMIT });
       notify(<SuccessNotification message={"You vote success"} />);
     } catch (error: any) {
-      notify(<DangerNotification message={error.code} />);
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
 
@@ -183,7 +187,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         />
       );
     } catch (error: any) {
-      notify(<DangerNotification message={error.code} />);
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
 
@@ -202,7 +208,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       await contract.cancelTransaction(transactionId, { gasLimit: GAS_LIMIT });
       notify(<SuccessNotification message={"You cancel success"} />);
     } catch (error: any) {
-      notify(<DangerNotification message={error.code} />);
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
 
@@ -231,7 +239,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         />
       ); // scan link
     } catch (error: any) {
-      notify(<DangerNotification message={error.code} />);
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
 
