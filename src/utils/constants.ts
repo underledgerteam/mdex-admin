@@ -124,7 +124,8 @@ export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     CHAIN_NAME: "Ethereum",
     CURRENCY_SYMBOL: "ETH",
     ADDRESS: "0x6f61d079a4c6678002e849532a2779d22c8230e8",
-    ABI: multiSigWalletABI
+    ABI: multiSigWalletABI,
+    BLOCK_EXPLORER_URLS: ["https://rinkeby.etherscan.io/"]
   },
   5: {
     NETWORK_NAME: "Goerli Testnet Network",
@@ -133,7 +134,8 @@ export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     CHAIN_NAME: "Ethereum",
     CURRENCY_SYMBOL: "ETH",
     ADDRESS: "0xC91607721DE4297aF7a7c32BD658d0A963C8FC78",
-    ABI: multiSigWalletABI
+    ABI: multiSigWalletABI,
+    BLOCK_EXPLORER_URLS: ["https://goerli.etherscan.io/"]
   }
 };
 

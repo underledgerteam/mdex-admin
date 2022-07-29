@@ -1,10 +1,11 @@
 interface NotificationInterface {
     title?: string
     message?: string
+    linkScan?: string
     dismiss?: () => void
   }
   
-  export function SuccessNotification({ title, message, dismiss }: NotificationInterface): JSX.Element {
+  export function SuccessNotification({ title, message, linkScan, dismiss }: NotificationInterface): JSX.Element {
     return (
       <div className="w-80 border-l-4 border-green-400 bg-green-50 p-4 text-sm flex items-center shadow-lg relative">
         <button
@@ -17,12 +18,12 @@ interface NotificationInterface {
         <div className="w-5 h-5 text-green-500 mr-2 flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" > <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /> </svg>
         </div>
-        <p>{message}</p>
+        <p>{message} {linkScan ? (<a href={`${linkScan}`} title="View Your Transactions" className="text-sky-500 underline">View Your Transactions</a>) : (<></>) }</p>
       </div>
     );
   }
   
-  export function InfoNotification({ title, message, dismiss }: NotificationInterface): JSX.Element {
+  export function InfoNotification({ title, message, linkScan, dismiss }: NotificationInterface): JSX.Element {
     return (
       <div className="w-80 border-l-4 border-blue-400 bg-blue-50 p-4 text-sm flex items-center shadow-lg relative">
         <button
@@ -35,12 +36,12 @@ interface NotificationInterface {
         <div className="w-5 h-5 text-blue-500 mr-2 flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" > <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /> </svg>
         </div>
-        <p>{message}</p>
+        <p>{message} {linkScan ? (<a href={`${linkScan}`} title="View Your Transactions" className="text-sky-500 underline">View Your Transactions</a>) : (<></>) }</p>
       </div>
     );
   }
   
-  export function WarningNotification({ title, message, dismiss }: NotificationInterface): JSX.Element {
+  export function WarningNotification({ title, message, linkScan, dismiss }: NotificationInterface): JSX.Element {
     return (
       <div className="w-80 border-l-4 border-yellow-400 bg-yellow-50 p-4 text-sm flex items-center shadow-lg relative">
         <button
@@ -53,12 +54,12 @@ interface NotificationInterface {
         <div className="w-5 h-5 text-yellow-500 mr-2 flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" > <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /> </svg>
         </div>
-        <p>{message}</p>
+        <p>{message} {linkScan ? (<a href={`${linkScan}`} title="View Your Transactions" className="text-sky-500 underline">View Your Transactions</a>) : (<></>) }</p>
       </div>
     );
   }
   
-  export function DangerNotification({ title, message, dismiss }: NotificationInterface): JSX.Element {
+  export function DangerNotification({ title, message, linkScan, dismiss }: NotificationInterface): JSX.Element {
     return (
       <div className="w-80 border-l-4 border-red-400 bg-red-50 p-4 text-sm flex items-center shadow-lg relative">
         <button
@@ -71,7 +72,7 @@ interface NotificationInterface {
         <div className="w-5 h-5 text-red-500 mr-2 flex-shrink-0">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" > <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /> </svg>
         </div>
-        <p>{message}</p>
+        <p>{message} {linkScan ? (<a href={`${linkScan}`} title="View Your Transactions" className="text-sky-500 underline">View Your Transactions</a>) : (<></>) }</p>
       </div>
     );
   }

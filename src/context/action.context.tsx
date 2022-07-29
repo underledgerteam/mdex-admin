@@ -172,8 +172,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         multiSigContract.ABI,
         signer
       );
-      await contract.noConfirmTransaction(transactionId, { gasLimit: GAS_LIMIT });
-      notify(<SuccessNotification message={"You vote no success"} />);
+      let result = await contract.noConfirmTransaction(transactionId, { gasLimit: GAS_LIMIT });      
+      await result.wait();
+      notify(<SuccessNotification message={`You vote no success`}  linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`} />);
     } catch (error: any) {
       notify(<DangerNotification message={error.message} />);
     }
@@ -210,8 +211,11 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         multiSigContract.ABI,
         signer
       );
-      await contract.executeTransaction(transactionId, { gasLimit: GAS_LIMIT });
-      notify(<SuccessNotification message={"Transaction success"} />); // scan link
+      
+      let result = await contract.executeTransaction(transactionId, { gasLimit: GAS_LIMIT });   
+      await result.wait();
+
+      notify(<SuccessNotification message={"Transaction success"}  linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`} />); // scan link
     } catch (error: any) {
       notify(<DangerNotification message={error.message} />);
     }
