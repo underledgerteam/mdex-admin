@@ -12,6 +12,15 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     ADDRESS: "",
     ABI: callTokenABI
   },
+  5: {
+    NETWORK_NAME: "Goerli Testnet Network",
+    NETWORK_SHORT_NAME: "Goerli",
+    SYMBOL: "chian/ethereum.png",
+    CHAIN_NAME: "Ethereum",
+    CURRENCY_SYMBOL: "ETH",
+    ADDRESS: "",
+    ABI: callTokenABI
+  },
   421611: {
     NETWORK_NAME: "Arbitrum Testnet",
     NETWORK_SHORT_NAME: "Arbitrum",
@@ -97,6 +106,7 @@ export const AVALANCHE_FUJI: number = 43113;
 
 export const SUPPORT_CHAIN: number[] = [
   RINKEBY,
+  GOERLI,
   BSC_CHAPEL,
   POLYGON_MUMBAI,
   ARBITRUM_RINKEBY,
