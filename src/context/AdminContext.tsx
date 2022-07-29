@@ -83,7 +83,7 @@ export const AdminContextProvider = ({
       setCurrentNetwork(chain);
     } catch (error: any) {
       setCurrentNetwork(beforeSwitchSwapObj);
-      <DangerNotification message={error.toString()} />;
+      <DangerNotification message={error.code} />;
     }
   };
   const walletSwitchChain = async (chainId: number): Promise<void> => {
@@ -100,7 +100,7 @@ export const AdminContextProvider = ({
       if (error.code === 4902) {
         await walletAddChain(chainId);
       }
-      <DangerNotification message={error.toString()} />;
+      <DangerNotification message={error.code} />;
       throw new Error("Can't Switch Chain");
     }
   };
