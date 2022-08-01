@@ -41,8 +41,8 @@ const Transactions: FC = () => {
           <button className="btn" onClick={() => cancelTransaction(txn.id)}>Cancel</button>
         </>
       );
-    } else if (status === "FAIL") {
-      return ("Fail");
+    } else if (status === "FAILED") {
+      return ("Failed");
     } else if (status === "SUCCESS") {
       return ("Success");
     } else {

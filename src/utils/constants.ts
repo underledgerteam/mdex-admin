@@ -155,7 +155,7 @@ export const TRANSACTION_STATUS: TRANSACTION_STATUS_INTERFACE = {
   0: "WAITING", // approver see Yes,No
   1: "READY", // owner see Execute
   2: "QUEUE", // everyone see Cancel
-  3: "FAIL",
+  3: "FAILED",
   4: "SUCCESS"
 };
 
