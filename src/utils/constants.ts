@@ -133,7 +133,7 @@ export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     SYMBOL: "chian/ethereum.png",
     CHAIN_NAME: "Ethereum",
     CURRENCY_SYMBOL: "ETH",
-    ADDRESS: "0x6f61d079a4c6678002e849532a2779d22c8230e8",
+    ADDRESS: "0x2A5e8342EEcD3DCD22D4720A6f3B7dDFCA129868",
     ABI: multiSigWalletABI,
     BLOCK_EXPLORER_URLS: ["https://rinkeby.etherscan.io/"]
   },
@@ -143,7 +143,7 @@ export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     SYMBOL: "chian/ethereum.png",
     CHAIN_NAME: "Ethereum",
     CURRENCY_SYMBOL: "ETH",
-    ADDRESS: "0xC91607721DE4297aF7a7c32BD658d0A963C8FC78",
+    ADDRESS: "0x5D9b61B62D27E310FE8679a76d27a558bD0E016D",
     ABI: multiSigWalletABI,
     BLOCK_EXPLORER_URLS: ["https://goerli.etherscan.io/"]
   }
@@ -155,7 +155,7 @@ export const TRANSACTION_STATUS: TRANSACTION_STATUS_INTERFACE = {
   0: "WAITING", // approver see Yes,No
   1: "READY", // owner see Execute
   2: "QUEUE", // everyone see Cancel
-  3: "FAIL",
+  3: "FAILED",
   4: "SUCCESS"
 };
 

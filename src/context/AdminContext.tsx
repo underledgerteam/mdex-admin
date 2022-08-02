@@ -1,5 +1,6 @@
 import React, { useEffect, useState, createContext } from "react";
 import { ethers } from "ethers";
+import { useNotifier } from "react-headless-notifier";
 import {
   SWAP_CONTRACTS,
   SUPPORT_CHAIN,
@@ -46,7 +47,7 @@ export const AdminContextProvider = ({
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [currentNetwork, setCurrentNetwork] = useState<number | string>(0);
   const [errorMessage, setErrorMessage] = useState<string>("");
-
+  const { notify } = useNotifier();
   const connectWallet = async (): Promise<void> => {
     try {
       if (!ethereum) return alert("Please install metamask");
@@ -83,7 +84,9 @@ export const AdminContextProvider = ({
       setCurrentNetwork(chain);
     } catch (error: any) {
       setCurrentNetwork(beforeSwitchSwapObj);
-      <DangerNotification message={error.toString()} />;
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
   const walletSwitchChain = async (chainId: number): Promise<void> => {
@@ -94,13 +97,15 @@ export const AdminContextProvider = ({
         await provider.send("wallet_switchEthereumChain", [
           { chainId: ethers.utils.hexValue(chainId) },
         ]);
-        <SuccessNotification message={"Switch success"} />;
+        notify(<SuccessNotification message={"Switch success"} />);
       }
     } catch (error: any) {
       if (error.code === 4902) {
         await walletAddChain(chainId);
       }
-      <DangerNotification message={error.toString()} />;
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
       throw new Error("Can't Switch Chain");
     }
   };

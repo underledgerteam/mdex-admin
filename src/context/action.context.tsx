@@ -14,7 +14,7 @@ import {
   MULTI_SIG_WALLET_CONTRACTS,
   MULTI_SIG_DECIMAL_SET,
   TRANSACTION_STATUS,
-  GAS_LIMIT
+  GAS_LIMIT,
 } from "../utils/constants";
 import {
   SuccessNotification,
@@ -133,7 +133,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       );
       notify(<SuccessNotification message={"Submit Success"} />);
     } catch (error: any) {
-      notify(<DangerNotification message={error.message} />);
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
 
@@ -154,7 +156,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       await contract.confirmTransaction(transactionId, { gasLimit: GAS_LIMIT });
       notify(<SuccessNotification message={"You vote success"} />);
     } catch (error: any) {
-      notify(<DangerNotification message={error.message} />);
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
 
@@ -172,11 +176,20 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         multiSigContract.ABI,
         signer
       );
-      let result = await contract.noConfirmTransaction(transactionId, { gasLimit: GAS_LIMIT });      
+      let result = await contract.noConfirmTransaction(transactionId, {
+        gasLimit: GAS_LIMIT,
+      });
       await result.wait();
-      notify(<SuccessNotification message={`You vote no success`}  linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`} />);
+      notify(
+        <SuccessNotification
+          message={`You vote no success`}
+          linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`}
+        />
+      );
     } catch (error: any) {
-      notify(<DangerNotification message={error.message} />);
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
 
@@ -195,7 +208,9 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
       await contract.cancelTransaction(transactionId, { gasLimit: GAS_LIMIT });
       notify(<SuccessNotification message={"You cancel success"} />);
     } catch (error: any) {
-      notify(<DangerNotification message={error.message} />);
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
 
@@ -211,13 +226,22 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         multiSigContract.ABI,
         signer
       );
-      
-      let result = await contract.executeTransaction(transactionId, { gasLimit: GAS_LIMIT });   
+
+      let result = await contract.executeTransaction(transactionId, {
+        gasLimit: GAS_LIMIT,
+      });
       await result.wait();
 
-      notify(<SuccessNotification message={"Transaction success"}  linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`} />); // scan link
+      notify(
+        <SuccessNotification
+          message={"Transaction success"}
+          linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`}
+        />
+      ); // scan link
     } catch (error: any) {
-      notify(<DangerNotification message={error.message} />);
+      if (typeof error.code != "number")
+        notify(<DangerNotification message={error.code} />);
+      else notify(<DangerNotification message={error.message} />);
     }
   };
 
