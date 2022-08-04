@@ -20,6 +20,7 @@ import {
   SuccessNotification,
   DangerNotification,
 } from "../components/shared/Notification";
+import { rejects } from "assert";
 
 declare var window: any;
 const { ethereum } = window;
@@ -127,11 +128,17 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         MULTI_SIG_WALLET_CONTRACTS[chainId].ABI,
         signer
       );
-      await multisigContract.submitWithdrawTransaction(
+      let result = await multisigContract.submitWithdrawTransaction(
         to,
         ethers.utils.parseEther(value.toString())
       );
-      notify(<SuccessNotification message={"Submit Success"} />);
+      await result.wait();
+      notify(
+        <SuccessNotification
+          message={"Submit Success"}
+          linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`}
+        />
+      );
     } catch (error: any) {
       if (typeof error.code != "number")
         notify(<DangerNotification message={error.code} />);
@@ -153,8 +160,16 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         multiSigContract.ABI,
         signer
       );
-      await contract.confirmTransaction(transactionId, { gasLimit: GAS_LIMIT });
-      notify(<SuccessNotification message={"You vote success"} />);
+      let result = await contract.confirmTransaction(transactionId, {
+        gasLimit: GAS_LIMIT,
+      });
+      await result.wait();
+      notify(
+        <SuccessNotification
+          message={"You vote success"}
+          linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`}
+        />
+      );
     } catch (error: any) {
       if (typeof error.code != "number")
         notify(<DangerNotification message={error.code} />);
@@ -205,8 +220,16 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         multiSigContract.ABI,
         signer
       );
-      await contract.cancelTransaction(transactionId, { gasLimit: GAS_LIMIT });
-      notify(<SuccessNotification message={"You cancel success"} />);
+      let result = await contract.cancelTransaction(transactionId, {
+        gasLimit: GAS_LIMIT,
+      });
+      await result.wait();
+      notify(
+        <SuccessNotification
+          message={"You cancel success"}
+          linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`}
+        />
+      );
     } catch (error: any) {
       if (typeof error.code != "number")
         notify(<DangerNotification message={error.code} />);
