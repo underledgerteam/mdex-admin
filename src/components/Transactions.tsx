@@ -17,36 +17,50 @@ const Transactions: FC = () => {
   const renderVoteColumn = (txn: TransactionInterface) => {
     const { id, caller, status, isVoted } = txn;
     if (status === "WAITING") {
-      if (admin?.adminAccount != caller.toLowerCase() && !isVoted) {
+      if (admin?.adminAccount !== caller.toLowerCase() && !isVoted) {
         return (
           <>
-            <button className="btn mx-2" onClick={() => voteConfirmTransaction(id)}>Yes</button>
-            <button className="btn mx-2" onClick={() => voteNotConfirmTransaction(id)}>No</button>
+            <button
+              className="btn mx-2"
+              onClick={() => voteConfirmTransaction(id)}
+            >
+              Yes
+            </button>
+            <button
+              className="btn mx-2"
+              onClick={() => voteNotConfirmTransaction(id)}
+            >
+              No
+            </button>
           </>
         );
       } else {
-        return ("Voted");
+        return "Voted";
       }
     } else if (status === "READY") {
       if (admin?.adminAccount === caller.toLowerCase()) {
         return (
           <>
-            <button className="btn" onClick={() => executeTransaction(txn.id)}>Execute</button>
+            <button className="btn" onClick={() => executeTransaction(txn.id)}>
+              Execute
+            </button>
           </>
         );
       }
     } else if (status === "QUEUE") {
       return (
         <>
-          <button className="btn" onClick={() => cancelTransaction(txn.id)}>Cancel</button>
+          <button className="btn" onClick={() => cancelTransaction(txn.id)}>
+            Cancel
+          </button>
         </>
       );
     } else if (status === "FAILED") {
-      return ("Failed");
+      return "Failed";
     } else if (status === "SUCCESS") {
-      return ("Success");
+      return "Success";
     } else {
-      return ("Error");
+      return "Error";
     }
     return null;
   };
@@ -69,20 +83,23 @@ const Transactions: FC = () => {
           </thead>
           <tbody>
             {transactions.length > 0 ? (
-              transactions.slice(0).reverse().map((txn) => {
-                return (
-                  <tr key={`${txn.id}`} className="text-center">
-                    <td>{txn.id}</td>
-                    <td>{shortenAddress(txn.caller)}</td>
-                    <td>{shortenAddress(txn.to)}</td>
-                    <td>{txn.value}</td>
-                    <td>{txn.timestamp}</td>
-                    <td>{txn.status}</td>
-                    <td>{txn.vote}</td>
-                    <td>{renderVoteColumn(txn)}</td>
-                  </tr>
-                );
-              })
+              transactions
+                .slice(0)
+                .reverse()
+                .map((txn) => {
+                  return (
+                    <tr key={`${txn.id}`} className="text-center">
+                      <td>{txn.id}</td>
+                      <td>{shortenAddress(txn.caller)}</td>
+                      <td>{shortenAddress(txn.to)}</td>
+                      <td>{txn.value}</td>
+                      <td>{txn.timestamp}</td>
+                      <td>{txn.status}</td>
+                      <td>{txn.vote}</td>
+                      <td>{renderVoteColumn(txn)}</td>
+                    </tr>
+                  );
+                })
             ) : (
               <tr className="text-center">
                 <td colSpan={8}>No results found.</td>
