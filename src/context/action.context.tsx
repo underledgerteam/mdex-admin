@@ -133,7 +133,12 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         ethers.utils.parseEther(value.toString())
       );
       await result.wait();
-      notify(<SuccessNotification message={"Submit Success"} />);
+      notify(
+        <SuccessNotification
+          message={"Submit Success"}
+          linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`}
+        />
+      );
     } catch (error: any) {
       if (typeof error.code != "number")
         notify(<DangerNotification message={error.code} />);
@@ -159,7 +164,12 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         gasLimit: GAS_LIMIT,
       });
       await result.wait();
-      notify(<SuccessNotification message={"You vote success"} />);
+      notify(
+        <SuccessNotification
+          message={"You vote success"}
+          linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`}
+        />
+      );
     } catch (error: any) {
       if (typeof error.code != "number")
         notify(<DangerNotification message={error.code} />);
@@ -214,7 +224,12 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         gasLimit: GAS_LIMIT,
       });
       await result.wait();
-      notify(<SuccessNotification message={"You cancel success"} />);
+      notify(
+        <SuccessNotification
+          message={"You cancel success"}
+          linkScan={`${MULTI_SIG_WALLET_CONTRACTS[chainId].BLOCK_EXPLORER_URLS?.[0]}/tx/${result.hash}`}
+        />
+      );
     } catch (error: any) {
       if (typeof error.code != "number")
         notify(<DangerNotification message={error.code} />);
