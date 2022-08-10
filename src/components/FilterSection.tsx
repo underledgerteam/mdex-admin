@@ -14,7 +14,6 @@ const FilterSection = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     search(addressTo);
-    clearInput();
   };
   return (
     <form onSubmit={handleSubmit} className="input-group hidden md:flex my-4">
