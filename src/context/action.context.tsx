@@ -16,6 +16,7 @@ import {
   TRANSACTION_STATUS,
   GAS_LIMIT,
 } from "../utils/constants";
+// notify
 import {
   SuccessNotification,
   DangerNotification,
@@ -34,6 +35,10 @@ const defaultValue: ActionContextInterface = {
   voteNotConfirmTransaction: async () => {},
   cancelTransaction: async () => {},
   executeTransaction: async () => {},
+  currentFilter: "",
+  updateFilter: (filter: string) => {},
+  searchAddress: "",
+  search: (address: string) => {},
 };
 
 export const ActionContext =
@@ -42,8 +47,17 @@ export const ActionContext =
 export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const admin = useContext(AdminContext);
   const { notify } = useNotifier();
-  const [treasuryBalance, setTreasuryBalance] = useState(0);
+  const [treasuryBalance, setTreasuryBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<TransactionInterface[]>([]);
+  const [currentFilter, setFilter] = useState<string>("");
+  const [searchAddress, setSearchAddress] = useState<string>("");
+
+  const updateFilter = (filter: string): void => {
+    setFilter(filter);
+  };
+  const search = (address: string): void => {
+    setSearchAddress(address);
+  };
 
   const getTreasuryBalance = async (): Promise<void> => {
     try {
@@ -289,6 +303,10 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         voteNotConfirmTransaction,
         cancelTransaction,
         executeTransaction,
+        currentFilter,
+        updateFilter,
+        searchAddress,
+        search,
       }}
     >
       {children}

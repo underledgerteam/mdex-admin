@@ -18,7 +18,10 @@ const TransferSection = (props: TransferSectionInterface): JSX.Element => {
         <div className="w-full input bg-white text-2xl mt-3">
           {`${balance} ${token}`}
         </div>
-        <button className="btn btn-connect mt-3" onClick={() => onClickButton()}>
+        <button
+          className="btn btn-connect mt-3"
+          onClick={() => onClickButton()}
+        >
           🔀 Transfer
         </button>
       </div>
@@ -26,4 +29,4 @@ const TransferSection = (props: TransferSectionInterface): JSX.Element => {
   );
 };
 
-export default TransferSection; 
+export default TransferSection;

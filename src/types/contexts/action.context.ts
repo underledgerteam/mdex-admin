@@ -7,6 +7,10 @@ export interface ActionContextInterface {
   voteNotConfirmTransaction: (txnId: number) => {};
   cancelTransaction: (txnId: number) => {};
   executeTransaction: (txnId: number) => {};
+  currentFilter: string;
+  updateFilter: (filter: string) => void;
+  searchAddress: string;
+  search: (address: string) => void;
 }
 
 export interface ActionProviderInterface {
