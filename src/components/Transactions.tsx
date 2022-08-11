@@ -1,4 +1,4 @@
-import { FC, useContext } from "react";
+import { FC, useContext, useEffect } from "react";
 import { ActionContext } from "../context/action.context";
 import { AdminContext } from "src/context/AdminContext";
 import { shortenAddress } from "../utils/shortenAddress.util";
@@ -11,6 +11,8 @@ const Transactions: FC = () => {
     voteNotConfirmTransaction,
     cancelTransaction,
     executeTransaction,
+    searchAddress,
+    currentFilter,
   } = useContext(ActionContext);
   const admin = useContext(AdminContext);
 
@@ -65,6 +67,18 @@ const Transactions: FC = () => {
     return null;
   };
 
+  const checkFilter = (txn: any) => {
+    if (currentFilter === "from" && searchAddress != "") {
+      return txn.caller === searchAddress;
+    } else if (currentFilter === "to" && searchAddress != "") {
+      return txn.to === searchAddress;
+    } else if (currentFilter === "AllFilter" && searchAddress != "") {
+      return txn.to === searchAddress || txn.caller === searchAddress;
+    } else {
+      return txn;
+    }
+  };
+
   return (
     <div className="mt-10">
       <div className="overflow-x-auto">
@@ -86,6 +100,7 @@ const Transactions: FC = () => {
               transactions
                 .slice(0)
                 .reverse()
+                .filter(checkFilter)
                 .map((txn) => {
                   return (
                     <tr key={`${txn.id}`} className="text-center">

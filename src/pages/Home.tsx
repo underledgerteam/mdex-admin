@@ -10,6 +10,7 @@ import InputSelectNetwork from "../components/shared/InputSelectNetwork";
 import AccessDenied from "../components/AccessDenied";
 import TransferSection from "src/components/TransferSection";
 import TransferModal from "src/components/TransferModal";
+import FilterSection from "src/components/FilterSection";
 
 import { SWAP_CONTRACTS } from "../utils/constants";
 
@@ -56,7 +57,11 @@ const Home: FC = () => {
               <>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="col-span-2 lg:col-span-1">
-                    <TransferSection balance={treasuryBalance} token={"USDT"} onClickButton={openModalHandler} />
+                    <TransferSection
+                      balance={treasuryBalance}
+                      token={"USDT"}
+                      onClickButton={openModalHandler}
+                    />
                   </div>
                   <div className="col-span-2 lg:col-span-1">
                     <InputSelectNetwork
@@ -65,6 +70,9 @@ const Home: FC = () => {
                       selectLabel="Select Network"
                     />
                   </div>
+                </div>
+                <div>
+                  <FilterSection />
                 </div>
 
                 <Transactions />

@@ -4,8 +4,7 @@ import { ActionContext } from "../context/action.context";
 
 const TransferModal = () => {
   const admin = useContext(AdminContext);
-  const { getTransactions, submitTransaction, treasuryBalance } =
-    useContext(ActionContext);
+  const { submitTransaction, treasuryBalance } = useContext(ActionContext);
   const [addressTo, setAddressTo] = useState<string>("");
   const [formValid, setFormValid] = useState<boolean>(false);
   const [amount, setAmount] = useState<number>(0);
