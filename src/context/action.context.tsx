@@ -21,7 +21,6 @@ import {
   SuccessNotification,
   DangerNotification,
 } from "../components/shared/Notification";
-import { rejects } from "assert";
 
 declare var window: any;
 const { ethereum } = window;

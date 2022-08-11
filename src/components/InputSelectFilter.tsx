@@ -2,7 +2,7 @@ import { useContext, useCallback } from "react";
 import { ActionContext } from "src/context/action.context";
 
 const InputSelectFilter = () => {
-  const filterList = ["from", "to"];
+  const filterList = ["AllFilter", "from", "to"];
   const { currentFilter, updateFilter, search } = useContext(ActionContext);
 
   const handleShowSelectFilter = () => {

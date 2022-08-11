@@ -10,8 +10,6 @@ import InputSelectNetwork from "../components/shared/InputSelectNetwork";
 import AccessDenied from "../components/AccessDenied";
 import TransferSection from "src/components/TransferSection";
 import TransferModal from "src/components/TransferModal";
-
-import InputSelectFilter from "src/components/InputSelectFilter";
 import FilterSection from "src/components/FilterSection";
 
 import { SWAP_CONTRACTS } from "../utils/constants";

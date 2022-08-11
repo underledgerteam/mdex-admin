@@ -11,7 +11,6 @@ const Transactions: FC = () => {
     voteNotConfirmTransaction,
     cancelTransaction,
     executeTransaction,
-    search,
     searchAddress,
     currentFilter,
   } = useContext(ActionContext);
@@ -73,6 +72,8 @@ const Transactions: FC = () => {
       return txn.caller === searchAddress;
     } else if (currentFilter === "to" && searchAddress != "") {
       return txn.to === searchAddress;
+    } else if (currentFilter === "AllFilter" && searchAddress != "") {
+      return txn.to === searchAddress || txn.caller === searchAddress;
     } else {
       return txn;
     }
