@@ -38,6 +38,7 @@ const defaultValue: ActionContextInterface = {
   updateFilter: (filter: string) => {},
   searchAddress: "",
   search: (address: string) => {},
+  loading: true
 };
 
 export const ActionContext =
@@ -50,6 +51,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const [transactions, setTransactions] = useState<TransactionInterface[]>([]);
   const [currentFilter, setFilter] = useState<string>("");
   const [searchAddress, setSearchAddress] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const updateFilter = (filter: string): void => {
     setFilter(filter);
@@ -83,6 +85,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
   };
 
   const getTransactions = async () => {
+    setLoading(true);
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const { chainId } = await provider.getNetwork();
@@ -107,6 +110,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
     } catch (error) {
       console.error("GetTransaction", error);
     }
+    setLoading(false);
   };
 
   const normalizedTransaction = (transactions: any): TransactionInterface[] => {
@@ -306,6 +310,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
         updateFilter,
         searchAddress,
         search,
+        loading,
       }}
     >
       {children}
