@@ -11,6 +11,7 @@ export interface ActionContextInterface {
   updateFilter: (filter: string) => void;
   searchAddress: string;
   search: (address: string) => void;
+  loading: boolean;
 }
 
 export interface ActionProviderInterface {
