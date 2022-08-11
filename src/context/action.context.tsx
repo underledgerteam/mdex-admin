@@ -38,7 +38,7 @@ const defaultValue: ActionContextInterface = {
   updateFilter: (filter: string) => {},
   searchAddress: "",
   search: (address: string) => {},
-  loading: true
+  loading: true,
 };
 
 export const ActionContext =
@@ -49,7 +49,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
   const { notify } = useNotifier();
   const [treasuryBalance, setTreasuryBalance] = useState<number>(0);
   const [transactions, setTransactions] = useState<TransactionInterface[]>([]);
-  const [currentFilter, setFilter] = useState<string>("");
+  const [currentFilter, setFilter] = useState<string>("AllFilter");
   const [searchAddress, setSearchAddress] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 

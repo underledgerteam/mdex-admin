@@ -21,7 +21,7 @@ const InputSelectFilter = () => {
           className="select select-bordered items-center w-full"
           onClick={handleShowSelectFilter}
         >
-          {currentFilter === "" ? "AllFilter" : currentFilter}
+          {currentFilter}
         </label>
         <ul
           id="dropdown-content"
