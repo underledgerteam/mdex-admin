@@ -70,11 +70,11 @@ const Transactions: FC = () => {
 
   const checkFilter = (txn: any) => {
     if (currentFilter === "from" && searchAddress != "") {
-      return txn.caller === searchAddress;
+      return txn.caller.includes(searchAddress);
     } else if (currentFilter === "to" && searchAddress != "") {
-      return txn.to === searchAddress;
+      return txn.to.includes(searchAddress);
     } else if (currentFilter === "AllFilter" && searchAddress != "") {
-      return txn.to === searchAddress || txn.caller === searchAddress;
+      return txn.to.includes(searchAddress) || txn.caller.includes(searchAddress);
     } else {
       return txn;
     }
