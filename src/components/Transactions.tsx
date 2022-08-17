@@ -88,20 +88,32 @@ const Transactions: FC = () => {
         <table className="table w-full">
           <thead>
             <tr className="text-center">
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th colSpan={3}>Vote</th>
+              <th></th>
+            </tr>
+            <tr className="text-center">
               <th>ID</th>
               <th>From</th>
               <th>To</th>
               <th>Value</th>
               <th>Timestamp</th>
               <th>Status</th>
-              <th>Vote</th>
+              <th>Yes</th>
+              <th>No</th>
+              <th>Voter</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr className="text-center">
-                <td colSpan={8}>
+                <td colSpan={10}>
                   <div className="text-center">
                     <div role="status">
                       <svg
@@ -138,7 +150,9 @@ const Transactions: FC = () => {
                       <td>{txn.value}</td>
                       <td>{txn.timestamp}</td>
                       <td>{txn.status}</td>
-                      <td>{txn.yestVote} / {txn.vote}</td>
+                      <td>{txn.yestVote}</td>
+                      <td>{txn.noVote}</td>
+                      <td>{txn.voter}</td>
                       <td>{renderVoteColumn(txn)}</td>
                     </tr>
                   );
