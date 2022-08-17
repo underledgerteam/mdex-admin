@@ -138,7 +138,7 @@ const Transactions: FC = () => {
                       <td>{txn.value}</td>
                       <td>{txn.timestamp}</td>
                       <td>{txn.status}</td>
-                      <td>{txn.vote}</td>
+                      <td>{txn.yestVote} / {txn.vote}</td>
                       <td>{renderVoteColumn(txn)}</td>
                     </tr>
                   );

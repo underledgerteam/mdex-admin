@@ -127,6 +127,7 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
           .unix(ethers.BigNumber.from(txn.timestamp).toNumber())
           .format("DD/MM/YYYY"),
         status: TRANSACTION_STATUS[txn.status],
+        yestVote: countYes,
         vote: countYes + countNo,
         isVoted: txn.isVoted,
       });
