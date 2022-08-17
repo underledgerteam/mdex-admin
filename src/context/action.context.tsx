@@ -15,6 +15,7 @@ import {
   MULTI_SIG_DECIMAL_SET,
   TRANSACTION_STATUS,
   GAS_LIMIT,
+  ADMIN_WALLET
 } from "../utils/constants";
 // notify
 import {
@@ -127,7 +128,10 @@ export const ActionProvider = ({ children }: ActionProviderInterface) => {
           .unix(ethers.BigNumber.from(txn.timestamp).toNumber())
           .format("DD/MM/YYYY"),
         status: TRANSACTION_STATUS[txn.status],
+        yestVote: countYes,
+        noVote: countNo,
         vote: countYes + countNo,
+        voter: ADMIN_WALLET.length,
         isVoted: txn.isVoted,
       });
     }
