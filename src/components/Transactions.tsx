@@ -1,4 +1,4 @@
-import { FC, useContext, useEffect } from "react";
+import { FC, useContext } from "react";
 import { ActionContext } from "../context/action.context";
 import { AdminContext } from "src/context/AdminContext";
 import { shortenAddress } from "../utils/shortenAddress.util";
@@ -69,11 +69,11 @@ const Transactions: FC = () => {
   };
 
   const checkFilter = (txn: TransactionInterface) => {
-    if (currentFilter === "from" && searchAddress != "") {
+    if (currentFilter === "from" && searchAddress !== "") {
       return txn.caller.includes(searchAddress);
-    } else if (currentFilter === "to" && searchAddress != "") {
+    } else if (currentFilter === "to" && searchAddress !== "") {
       return txn.to.includes(searchAddress);
-    } else if (currentFilter === "AllFilter" && searchAddress != "") {
+    } else if (currentFilter === "AllFilter" && searchAddress !== "") {
       return (
         txn.to.includes(searchAddress) || txn.caller.includes(searchAddress)
       );
@@ -88,26 +88,19 @@ const Transactions: FC = () => {
         <table className="table w-full">
           <thead>
             <tr className="text-center">
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
-              <th></th>
+              <th rowSpan={2} className="w-1">ID</th>
+              <th rowSpan={2}>From</th>
+              <th rowSpan={2}>To</th>
+              <th rowSpan={2}>Value</th>
+              <th rowSpan={2}>Timestamp</th>
+              <th rowSpan={2}>Status</th>
               <th colSpan={3}>Vote</th>
-              <th></th>
+              <th rowSpan={2}></th>
             </tr>
             <tr className="text-center">
-              <th>ID</th>
-              <th>From</th>
-              <th>To</th>
-              <th>Value</th>
-              <th>Timestamp</th>
-              <th>Status</th>
-              <th>Yes</th>
-              <th>No</th>
-              <th>Voter</th>
-              <th></th>
+              <th className="w-1">Yes</th>
+              <th className="w-1">No</th>
+              <th className="w-1">All</th>
             </tr>
           </thead>
           <tbody>
@@ -159,7 +152,7 @@ const Transactions: FC = () => {
                 })
             ) : (
               <tr className="text-center">
-                <td colSpan={8}>No results found.</td>
+                <td colSpan={10}>No results found.</td>
               </tr>
             )}
           </tbody>
