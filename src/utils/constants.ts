@@ -121,7 +121,6 @@ export const ADMIN_WALLET: string[] = [
   "0xa9aAB3581a3986E38E84643793FCe205677bd19d".toLowerCase(), // Aon
   "0x2BA9a6C68D39EFEc15C2c048124B4f6dAac5d6fd".toLowerCase(), // Tang
   "0x733c6f2C476bb2bAE4d9D694377EF109c0a576f6".toLowerCase(), // Jab 1
-  "0x56E1175b24B440C57EA6677a50bfF4bc461FF60f".toLowerCase(), // Jab 2
 ];
 
 export const DEFAULT_CHAIN: number = RINKEBY;
