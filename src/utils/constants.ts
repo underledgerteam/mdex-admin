@@ -1,4 +1,7 @@
-import { SWAP_CONTRACTS_INTERFACE, TRANSACTION_STATUS_INTERFACE } from "../types/constants";
+import {
+  SWAP_CONTRACTS_INTERFACE,
+  TRANSACTION_STATUS_INTERFACE,
+} from "../types/constants";
 import multiSigWalletABI from "src/utils/MultiSigWalletABI.json";
 import callTokenABI from "src/utils/CallToken.json";
 
@@ -10,7 +13,7 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     CHAIN_NAME: "Ethereum",
     CURRENCY_SYMBOL: "ETH",
     ADDRESS: "",
-    ABI: callTokenABI
+    ABI: callTokenABI,
   },
   5: {
     NETWORK_NAME: "Goerli Testnet Network",
@@ -19,7 +22,7 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     CHAIN_NAME: "Ethereum",
     CURRENCY_SYMBOL: "ETH",
     ADDRESS: "",
-    ABI: callTokenABI
+    ABI: callTokenABI,
   },
   421611: {
     NETWORK_NAME: "Arbitrum Testnet",
@@ -37,7 +40,7 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     BLOCK_EXPLORER_URLS: ["https://rinkeby-explorer.arbitrum.io/#/"],
 
     ADDRESS: "",
-    ABI: callTokenABI
+    ABI: callTokenABI,
   },
   43113: {
     NETWORK_NAME: "AVAX Testnet Network",
@@ -55,7 +58,7 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     BLOCK_EXPLORER_URLS: ["https://testnet.snowtrace.io/"],
 
     ADDRESS: "",
-    ABI: callTokenABI
+    ABI: callTokenABI,
   },
   80001: {
     NETWORK_NAME: "Polygon Testnet Network",
@@ -73,7 +76,7 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     BLOCK_EXPLORER_URLS: ["https://mumbai.polygonscan.com/"],
 
     ADDRESS: "",
-    ABI: callTokenABI
+    ABI: callTokenABI,
   },
   97: {
     NETWORK_NAME: "Binance Smart Chain Testnet",
@@ -91,7 +94,7 @@ export const SWAP_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     BLOCK_EXPLORER_URLS: ["https://explorer.binance.org/smart-testnet"],
 
     ADDRESS: "",
-    ABI: callTokenABI
+    ABI: callTokenABI,
   },
 };
 
@@ -120,7 +123,7 @@ export const ADMIN_WALLET: string[] = [
   "0xe9D2e454968379426BB6b0a92ffaf20A60ff579d".toLowerCase(), // Prame
   "0xa9aAB3581a3986E38E84643793FCe205677bd19d".toLowerCase(), // Aon
   "0x2BA9a6C68D39EFEc15C2c048124B4f6dAac5d6fd".toLowerCase(), // Tang
-  "0x733c6f2C476bb2bAE4d9D694377EF109c0a576f6".toLowerCase(), // Jab 1
+  "0x56E1175b24B440C57EA6677a50bfF4bc461FF60f".toLowerCase(), // Jab
 ];
 
 export const DEFAULT_CHAIN: number = RINKEBY;
@@ -134,7 +137,7 @@ export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     CURRENCY_SYMBOL: "ETH",
     ADDRESS: "0x2A5e8342EEcD3DCD22D4720A6f3B7dDFCA129868",
     ABI: multiSigWalletABI,
-    BLOCK_EXPLORER_URLS: ["https://rinkeby.etherscan.io/"]
+    BLOCK_EXPLORER_URLS: ["https://rinkeby.etherscan.io/"],
   },
   5: {
     NETWORK_NAME: "Goerli Testnet Network",
@@ -144,8 +147,8 @@ export const MULTI_SIG_WALLET_CONTRACTS: SWAP_CONTRACTS_INTERFACE = {
     CURRENCY_SYMBOL: "ETH",
     ADDRESS: "0x5D9b61B62D27E310FE8679a76d27a558bD0E016D",
     ABI: multiSigWalletABI,
-    BLOCK_EXPLORER_URLS: ["https://goerli.etherscan.io/"]
-  }
+    BLOCK_EXPLORER_URLS: ["https://goerli.etherscan.io/"],
+  },
 };
 
 export const MULTI_SIG_DECIMAL_SET: number = 2;
@@ -155,7 +158,7 @@ export const TRANSACTION_STATUS: TRANSACTION_STATUS_INTERFACE = {
   1: "READY", // owner see Execute
   2: "QUEUE", // everyone see Cancel
   3: "FAILED",
-  4: "SUCCESS"
+  4: "SUCCESS",
 };
 
 export const GAS_LIMIT: number = 2100000;
